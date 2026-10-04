@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d9488">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SC Delivery">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Self Care Delivery</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#07101d;--card:#111a2b;--line:#2f4261;--mint:#20c7b6;--blue:#2f80ff;--yellow:#f59e0b;--red:#ef4444;--text:#eef6ff;--muted:#9aa8bd;--shadow:0 18px 40px rgba(0,0,0,.32)}
+body{margin:0;background:linear-gradient(180deg,#07101d,#0b1220 40%,#07101d);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;padding-bottom:90px}
+.top{position:sticky;top:0;z-index:20;background:rgba(7,16,29,.94);backdrop-filter:blur(12px);border-bottom:1px solid rgba(47,66,97,.7);padding:10px 12px 10px}
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.logo{display:flex;align-items:center;gap:9px}
+.mark{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#14b8a6,#34d399);display:grid;place-items:center;color:#07101d;font-weight:1000;font-size:19px}
+.title{font-size:18px;font-weight:1000;letter-spacing:-.5px}
+.sync{font-size:11px;color:var(--muted);font-weight:800;margin-top:1px}
+.refresh{height:40px;border:1px solid #344865;border-radius:14px;background:#10192a;color:#eef6ff;font-weight:1000;padding:0 12px;font-size:13px}
+.notif-btn{border-color:#f59e0b;color:#fbbf24;background:#1c1608;animation:pulseNotifBtn 2s ease-in-out infinite}
+@keyframes pulseNotifBtn{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.5)}50%{box-shadow:0 0 0 6px rgba(245,158,11,0)}}
+.tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-bottom:7px}
+.tab{height:40px;border-radius:14px;background:#10192a;color:#cbd5e1;border:1px solid #263752;font-weight:1000;font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);padding:0 6px;white-space:nowrap}
+.tab.active{background:linear-gradient(135deg,#15a99c,#23d3c4);border-color:#2dd4bf;color:#07101d}
+.tab.add-tab{color:#5eead4;border-color:#14b8a6;background:#0d1b2d}
+.filters{display:grid;grid-template-columns:1fr;gap:7px;margin-bottom:7px}
+.manual-courier{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-bottom:9px}
+.manual-courier .add-driver{height:46px;border-radius:17px;border:0;background:linear-gradient(135deg,#0f766e,#14b8a6);color:#07101d;font-size:13px;font-weight:1000;padding:0 14px;white-space:nowrap}
+.select,.search{width:100%;height:40px;border-radius:14px;border:1px solid #2f4261;background:#10192a;color:#eef6ff;font-weight:950;font-size:14px;padding:0 12px;outline:none}
+.search{text-align:right}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:5px}
+.sum{background:#0e1728;border:1px solid #263752;border-radius:12px;padding:5px 3px;text-align:center;color:#eef6ff;cursor:pointer;min-height:40px}
+.sum.active{border-color:#2dd4bf;background:#102845}
+.sum b{display:block;font-size:15px;color:#2dd4bf;line-height:1.05;font-weight:1000}
+.sum span{font-size:9px;color:#9aa8bd;font-weight:1000;line-height:1.05}
+.sum.pri{border-color:#f59e0b;background:#1c1608}
+.sum.pri b{color:#fbbf24}
+.sum.pri.active{border-color:#f59e0b;background:#2a1f0a;box-shadow:0 0 0 2px rgba(245,158,11,.28)}
+.sum.danger{border-color:#7f1d1d;background:#1a0a0e}
+.sum.danger b{color:#fca5a5}
+.sum.danger.active{border-color:#ef4444;background:#2a0f13;box-shadow:0 0 0 2px rgba(239,68,68,.3)}
+.wrap{padding:10px}
+.list{display:grid;gap:10px}
+.card{background:linear-gradient(180deg,#111c30,#0d1626);border:1px solid #3b5478;border-radius:20px;box-shadow:var(--shadow)}
+.card.delivered{opacity:.55}
+@keyframes blinkDot{50%{opacity:.25}}
+.countdown{margin-bottom:8px;border-radius:15px;padding:10px 12px;font-size:15px;font-weight:1000;text-align:center;display:flex;align-items:center;justify-content:center;gap:9px;letter-spacing:-.3px}
+.countdown.soon{background:linear-gradient(135deg,#f97316,#fb923c);color:#1a0a02;border:1px solid #fed7aa;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.countdown.late{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;border:1px solid #fecaca;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+.countdown-dot{width:10px;height:10px;border-radius:50%;background:currentColor;animation:blinkDot 1s ease-in-out infinite;flex:0 0 auto}
+.card-inner{padding:9px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:7px}
+.code{border:1px solid #2dd4bf;border-radius:999px;padding:6px 10px;font-size:16px;font-weight:1000;color:#e0f2fe}
+.badge{border-radius:999px;padding:5px 8px;font-size:11px;font-weight:1000;white-space:nowrap}
+.b-waiting{background:#2a1f10;color:#fbbf24;border:1px solid #f59e0b}
+.b-assigned{background:#102845;color:#93c5fd;border:1px solid #3b82f6}
+.b-arrived{background:#112f2d;color:#5eead4;border:1px solid #14b8a6}
+.b-delivered{background:#142018;color:#86efac;border:1px solid #22c55e}
+.b-soon{background:#2a1708;color:#fed7aa;border:1px solid #f97316}
+.b-late{background:#2a1010;color:#fecaca;border:1px solid #ef4444}
+.main{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:9px}
+.hotel{border:1px solid #31527a;background:#0e1728;border-radius:15px;min-height:34px;padding:7px 10px;font-size:13px;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;display:flex;align-items:center;justify-content:center}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+.chip{border:1px solid #263752;background:#08111f;border-radius:13px;min-height:30px;padding:6px 8px;font-size:11px;font-weight:950;color:#dbeafe;text-align:center}
+.chip.exit{color:#5eead4;border-color:#14b8a6}
+.chip.pay{color:#fbbf24;border-color:#f59e0b}
+.person-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px}
+.person{display:inline-flex;align-items:center;border-radius:999px;border:1px solid #31527a;background:#0e1728;color:#cbd5e1;padding:5px 7px;font-size:10px;font-weight:1000}
+.person.prep{border-color:#14b8a6;color:#5eead4}
+.person.courier{border-color:#3b82f6;color:#93c5fd}
+.assign-box{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin-bottom:6px}
+.courier-select,.courier-picker{height:38px;border-radius:14px;background:#0b1220;border:1px solid #2f4261;color:#eef6ff;font-size:12px;font-weight:950;padding:0 9px;outline:none;width:100%;text-align:right}.courier-picker{display:flex;align-items:center;justify-content:space-between;cursor:pointer}.courier-picker span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.courier-picker:before{content:"⌄";color:#9aa8bd;font-size:18px;line-height:1}.courier-picker.has-value{border-color:#3b82f6;color:#dbeafe}
+.assign-btn{height:38px;border-radius:14px;background:linear-gradient(135deg,#2563eb,#3b82f6);border:0;color:#eef6ff;font-size:12px;font-weight:1000;padding:0 10px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.action{height:37px;border-radius:14px;border:0;color:#fff;font-size:12px;font-weight:1000;box-shadow:0 8px 16px rgba(0,0,0,.22)}
+.loc{background:linear-gradient(135deg,#0f766e,#14b8a6)}
+.clear{background:linear-gradient(135deg,#475569,#64748b)}
+.done{background:linear-gradient(135deg,#16a34a,#22c55e);color:#07101d}
+.problem{background:linear-gradient(135deg,#dc2626,#ef4444)}
+.empty{margin:24px auto;text-align:center;color:#9aa8bd;background:#10192a;border:1px solid #263752;border-radius:22px;padding:24px 12px;font-weight:950}
+.toast{position:fixed;right:14px;left:14px;bottom:14px;z-index:60;background:#07101d;border:1px solid #2f4261;color:#fff;text-align:center;padding:13px;border-radius:16px;font-weight:1000;box-shadow:var(--shadow);opacity:0;transform:translateY(16px);pointer-events:none;transition:.18s}
+.toast.show{opacity:1;transform:translateY(0)}
+.loading .refresh{opacity:.6}
+@media(max-width:430px){
+  .summary{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sum{min-height:38px;padding:5px 2px}
+  .sum b{font-size:14px}
+  .sum span{font-size:9.5px}
+  .top{padding:12px 10px 10px}
+  .wrap{padding:9px 8px}
+  .title{font-size:20px}
+  .main{grid-template-columns:1fr}
+  .amount{width:max-content;max-width:100%}
+  .assign-box{grid-template-columns:1fr}
+  .assign-btn{width:100%}
+}
+
+.simple-info{grid-template-columns:1fr 1fr}
+.simple-info:has(.chip.wide){grid-template-columns:1fr}
+.simple-info .chip.wide{grid-column:1/-1;min-height:38px;font-size:14px;font-weight:1000;padding:8px 12px}
+.simple-actions{grid-template-columns:1fr 1fr}
+.simple-actions:has(button:only-child){grid-template-columns:1fr}.simple-actions .wide{grid-column:1/-1}
+.person-row:empty{display:none}
+.actions:empty{display:none}
+@media(max-width:430px){
+  .simple-info{grid-template-columns:1fr 1fr}
+  .simple-actions{grid-template-columns:1fr 1fr}
+}
+
+
+.hotel-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin-bottom:6px}
+.map-mini{height:34px;border-radius:14px;border:1px solid #14b8a6;background:#0d2d2b;color:#5eead4;font-size:11px;font-weight:1000;padding:0 10px;white-space:nowrap}
+@media(max-width:430px){
+  /* keep hotel + location on same row on mobile too */
+}
+
+.modal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);display:none;align-items:flex-end;padding:12px}
+.modal.show{display:flex}
+.modal-panel{width:100%;max-height:82vh;background:linear-gradient(180deg,#10192a,#07101d);border:1px solid #2f4261;border-radius:24px;box-shadow:var(--shadow);padding:13px;overflow:hidden}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.modal-title{font-size:18px;font-weight:1000;color:#eef6ff}
+.modal-close{width:38px;height:38px;border-radius:14px;border:1px solid #2f4261;background:#0b1220;color:#cbd5e1;font-size:24px;line-height:1}
+.modal-search{width:100%;height:43px;border-radius:16px;border:1px solid #3b82f6;background:#0b1220;color:#eef6ff;font-weight:950;font-size:14px;padding:0 12px;text-align:right;outline:none;margin-bottom:10px}
+.courier-list{display:grid;gap:6px;max-height:52vh;overflow:auto;padding-left:3px}
+.courier-option{height:42px;border-radius:15px;border:1px solid #263752;background:#0e1728;color:#eef6ff;font-size:14px;font-weight:950;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:right}
+.courier-option .dot{width:18px;height:18px;border-radius:50%;border:2px solid #64748b;flex:0 0 auto}
+.courier-option.selected{border-color:#3b82f6;background:#102845}
+.courier-option.selected .dot{border-color:#2dd4bf;box-shadow:inset 0 0 0 4px #102845;background:#2dd4bf}
+.courier-empty{border:1px solid #263752;background:#0e1728;color:#9aa8bd;border-radius:16px;padding:18px;text-align:center;font-weight:950}
+.add-courier-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-bottom:12px}
+.add-courier-btn{height:43px;border-radius:16px;border:0;background:linear-gradient(135deg,#0f766e,#14b8a6);color:#07101d;font-size:14px;font-weight:1000;padding:0 16px;white-space:nowrap}
+.manage-option{height:46px;border-radius:15px;border:1px solid #263752;background:#0e1728;color:#eef6ff;font-size:14px;font-weight:950;padding:0 8px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.manage-option span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.del-courier{width:34px;height:34px;flex:0 0 auto;border-radius:11px;border:1px solid #ef4444;background:#241014;color:#fecaca;font-size:18px;font-weight:1000;line-height:1;display:grid;place-items:center}
+.modal.show .confirm-panel{align-self:center;margin:auto}
+.confirm-panel{max-width:380px}
+.confirm-text{font-size:16px;font-weight:1000;color:#eef6ff;text-align:center;padding:8px 4px 16px;line-height:1.5}
+.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.confirm-no{height:46px;border-radius:16px;border:1px solid #344865;background:#10192a;color:#cbd5e1;font-size:14px;font-weight:1000}
+.confirm-yes{height:46px;border-radius:16px;border:0;background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-size:14px;font-weight:1000}
+
+/* ============================================================
+   PREMIUM VISUAL OVERHAUL v4
+   ============================================================ */
+
+/* ---- Splash Screen ---- */
+.splash{position:fixed;inset:0;z-index:9999;background:linear-gradient(155deg,#0d9488 0%,#14b8a6 45%,#22d3ee 100%);display:grid;place-items:center;transition:opacity .55s ease,visibility .55s ease}
+.splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.splash-inner{text-align:center;color:#fff;padding:20px}
+.splash-logo{width:148px;height:148px;margin:0 auto 26px;border-radius:38px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.35),0 0 0 8px rgba(255,255,255,.08);animation:splashPop .7s cubic-bezier(.34,1.56,.64,1)}
+.splash-logo img{width:100%;height:100%;display:block}
+.splash-title{font-size:30px;font-weight:1000;letter-spacing:-.7px;margin-bottom:10px;text-shadow:0 2px 12px rgba(0,0,0,.25);animation:splashFadeUp .55s .2s both}
+.splash-sub{font-size:14px;font-weight:900;opacity:.9;margin-bottom:28px;letter-spacing:.5px;animation:splashFadeUp .55s .35s both}
+.splash-dots{display:flex;gap:10px;justify-content:center;animation:splashFadeUp .55s .5s both}
+.splash-dots span{width:11px;height:11px;border-radius:50%;background:#fff;animation:splashDot 1.2s infinite ease-in-out}
+.splash-dots span:nth-child(2){animation-delay:.15s}
+.splash-dots span:nth-child(3){animation-delay:.3s}
+@keyframes splashPop{from{opacity:0;transform:scale(.4) rotate(-8deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes splashFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes splashDot{0%,80%,100%{opacity:.35;transform:scale(1)}40%{opacity:1;transform:scale(1.4)}}
+
+/* ---- Premium Header ---- */
+.top{padding:12px 14px 12px;background:linear-gradient(180deg,rgba(7,16,29,.98) 0%,rgba(7,16,29,.94) 100%);border-bottom:1px solid rgba(20,184,166,.15)}
+.head{margin-bottom:11px}
+.logo{gap:11px}
+.mark{width:48px;height:48px;border-radius:14px;padding:0;overflow:hidden;background:transparent;box-shadow:0 6px 20px rgba(20,184,166,.35);position:relative}
+.mark img{width:100%;height:100%;display:block}
+.mark:after{content:"";position:absolute;inset:0;border-radius:14px;background:linear-gradient(140deg,rgba(255,255,255,.18),transparent 50%);pointer-events:none}
+.title{font-size:18px;font-weight:1000;letter-spacing:-.3px;background:linear-gradient(90deg,#eef6ff,#5eead4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.sync{font-size:11px;color:#7dd3c0;font-weight:800;margin-top:2px;display:flex;align-items:center;gap:5px}
+.sync:before{content:"";width:6px;height:6px;border-radius:50%;background:#22d3ee;box-shadow:0 0 8px #22d3ee;animation:syncPulse 2s ease-in-out infinite}
+@keyframes syncPulse{50%{opacity:.4}}
+
+/* ---- Tabs & Filters (refined) ---- */
+.tabs{gap:8px}
+.tab{height:42px;border-radius:14px;font-size:14px;letter-spacing:-.2px}
+.tab.active{box-shadow:0 6px 16px rgba(20,184,166,.35)}
+.tab span{margin-inline-start:6px;font-size:13px;opacity:.95}
+.search{height:42px;border-radius:14px;font-size:14px}
+.search::placeholder{color:#64748b}
+.summary{gap:6px;margin-top:6px}
+.sum{border-radius:13px;min-height:46px;padding:6px 3px;display:flex;flex-direction:column;justify-content:center;gap:2px;transition:transform .1s}
+.sum:active{transform:scale(.96)}
+.sum b{font-size:17px;font-weight:1000}
+.sum span{font-size:9.5px}
+
+/* ---- Cards - Premium redesign ---- */
+.wrap{padding:12px 10px}
+.list{gap:12px}
+.card{border-radius:22px;background:linear-gradient(180deg,#131e34 0%,#0d1626 100%);border:1px solid #3b5478;box-shadow:0 4px 14px rgba(0,0,0,.5),0 0 0 1px rgba(148,163,184,.06),inset 0 1px 0 rgba(255,255,255,.05)}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card-inner{padding:8px}
+
+/* card head - order id + status badge */
+.card-head{margin-bottom:6px;align-items:center}
+.code{font-size:13px;font-weight:1000;padding:4px 10px;border-radius:999px;color:#5eead4;background:rgba(20,184,166,.12);border:1px solid rgba(20,184,166,.35);letter-spacing:-.2px;display:inline-flex;align-items:center;gap:6px}
+.dup-badge{background:rgba(245,158,11,.2);color:#fbbf24;border:1px solid rgba(245,158,11,.45);border-radius:999px;padding:2px 7px;font-size:10.5px;font-weight:1000;line-height:1}
+.badge{font-size:11px;padding:5px 9px;border-radius:999px;font-weight:1000;letter-spacing:-.2px}
+
+/* v27d: essentials source (from cigarettes-prices site) */
+.essentials-tag{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:1px solid #fb923c;border-radius:999px;padding:3px 9px;font-size:10.5px;font-weight:1000;line-height:1;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 2px 8px rgba(249,115,22,.35);display:inline-flex;align-items:center;gap:4px}
+.card.essentials{background:linear-gradient(180deg,#2a1810 0%,#1f1108 100%);border-color:#c2410c}
+.card.essentials::before{background:linear-gradient(180deg,#f97316,#ea580c) !important;content:"";position:absolute;top:0;bottom:0;inset-inline-start:0;width:4px;border-radius:20px 0 0 20px}
+.card.essentials .code{color:#fed7aa;background:rgba(249,115,22,.15);border-color:rgba(249,115,22,.4)}
+.card.essentials .hotel{background:linear-gradient(135deg,#2a1a10 0%,#1f120a 100%);border-color:#7c3416;color:#fed7aa}
+.card.essentials .time-block{background:linear-gradient(135deg,#1f1208 0%,#2a1810 100%);border-color:#7c3416}
+.card.essentials .time-block .time-value{color:#fed7aa}
+.card.essentials .time-block.primary{background:linear-gradient(135deg,#2a1810 0%,#3a220f 100%);border-color:#f97316}
+.card.essentials .time-block.primary .time-value{color:#ffedd5;text-shadow:0 2px 12px rgba(249,115,22,.4)}
+.card.essentials .time-block.primary .time-label{color:#fed7aa}
+
+/* Times row: pickup (primary) + delivery (secondary) side by side */
+.times-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+.time-block{background:linear-gradient(135deg,#0a1b2a 0%,#0e2438 100%);border:1px solid #1e3a5f;border-radius:11px;padding:6px 10px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;min-height:52px}
+.time-block .time-label{font-size:11px;font-weight:1000;color:#64748b;line-height:1;letter-spacing:.3px}
+.time-block .time-value{font-size:16px;font-weight:1000;color:#93c5fd;line-height:1;letter-spacing:-.3px}
+.time-block.primary{background:linear-gradient(135deg,#0d2d2b 0%,#0a2523 100%);border-color:#14b8a6}
+.time-block.primary .time-label{color:#5eead4}
+.time-block.primary .time-value{font-size:20px;color:#eef6ff;text-shadow:0 2px 12px rgba(20,184,166,.35)}
+.card.soon .time-block.primary{border-color:#f97316;background:linear-gradient(135deg,#1f160f 0%,#150e08 100%)}
+.card.soon .time-block.primary .time-value{color:#fed7aa}
+.card.soon .time-block.primary .time-label{color:#fed7aa}
+.card.late .time-block.primary{border-color:#ef4444;background:linear-gradient(135deg,#241014 0%,#180a0d 100%)}
+.card.late .time-block.primary .time-value{color:#fecaca}
+.card.late .time-block.primary .time-label{color:#fecaca}
+
+/* Hotel row - compact */
+.hotel-row{gap:6px;margin-bottom:6px;margin-top:6px;grid-template-columns:minmax(0,1fr) auto}
+.hotel{min-height:32px;padding:5px 12px;font-size:13px;font-weight:1000;border-radius:10px;background:linear-gradient(135deg,#0e1b2f 0%,#0a1728 100%);border:1px solid #2f4261;color:#eef6ff;letter-spacing:-.2px}
+.map-mini{height:32px;border-radius:10px;font-size:11px;font-weight:1000;padding:0 11px;background:linear-gradient(135deg,#0d2d2b 0%,#0a2523 100%)}
+
+/* Action button - compact */
+.actions{margin-top:6px}
+.action{height:38px;border-radius:10px;font-size:13px;font-weight:1000;letter-spacing:-.2px;box-shadow:0 4px 10px rgba(34,197,94,.22);transition:transform .12s}
+.action:active{transform:scale(.97)}
+.action.done{background:linear-gradient(135deg,#16a34a 0%,#22c55e 100%);color:#052e15}
+
+/* Countdown banner - compact */
+.countdown{padding:5px 12px;font-size:12.5px;border-radius:10px;margin-bottom:6px;letter-spacing:-.2px;min-height:30px}
+.countdown-dot{width:8px;height:8px}
+
+/* Urgency signaled via LEFT accent strip only - keeps card body neutral */
+.card{position:relative}
+.card.soon:before,.card.late:before{content:"";position:absolute;top:0;bottom:0;inset-inline-start:0;width:4px;border-radius:20px 0 0 20px}
+.card.soon:before{background:linear-gradient(180deg,#f97316,#ea580c)}
+.card.late:before{background:linear-gradient(180deg,#ef4444,#dc2626)}
+/* status badge tint stays subtle */
+.card.soon .code{color:#fed7aa;background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.25)}
+.card.late .code{color:#fecaca;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.25)}
+
+/* List gap - clear card separation with divider */
+.list{gap:20px;position:relative}
+.list > .card + .card{position:relative}
+.list > .card + .card::after{content:"";position:absolute;top:-11px;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(94,234,212,.4) 50%,transparent 100%);pointer-events:none}
+.wrap{padding:12px 10px}
+
+/* Empty state - nicer */
+.empty{background:linear-gradient(180deg,#10192a 0%,#0b1220 100%);border:1px dashed #263752;border-radius:22px;padding:40px 20px;font-size:15px;color:#64748b}
+
+/* Refresh button - refined */
+.refresh{border-radius:14px;height:42px;font-size:13px;background:linear-gradient(135deg,#10192a 0%,#0b1220 100%);border-color:#2f4261;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.refresh:active{transform:scale(.96)}
+
+/* Toast - refined */
+.toast{border-radius:18px;padding:14px 18px;background:linear-gradient(135deg,#111c30 0%,#0a1220 100%);border-color:#2f4261;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* Body background subtle pattern */
+body{background:radial-gradient(ellipse at top,#0a1a2e 0%,#07101d 40%,#050b16 100%)}
+
+/* ---- Gear settings button ---- */
+.gear-btn{width:42px;padding:0!important;font-size:16px}
+
+/* ---- Couriers Management Modal ---- */
+.couriers-list{max-height:45vh;overflow-y:auto;margin-bottom:10px}
+.courier-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:linear-gradient(135deg,#0e1b2f 0%,#0a1728 100%);border:1px solid #2f4261;border-radius:12px;margin-bottom:6px}
+.courier-item-name{font-size:14px;font-weight:1000;color:#eef6ff}
+.courier-delete{background:transparent;border:1px solid #7f1d1d;border-radius:10px;color:#fca5a5;font-size:12px;font-weight:1000;padding:5px 10px;line-height:1}
+.courier-delete:active{background:rgba(239,68,68,.15)}
+.couriers-empty{padding:20px 10px;text-align:center;color:#64748b;font-size:13px;font-weight:800}
+.couriers-add{display:grid;gap:6px;padding-top:8px;border-top:1px solid #2f4261}
+.courier-input{width:100%;height:44px;border-radius:14px;border:1px solid #2f4261;background:#10192a;color:#eef6ff;font-weight:1000;font-size:14px;padding:0 12px;text-align:right;outline:none}
+.courier-input:focus{border-color:#14b8a6}
+
+/* ---- Courier Picker Modal ---- */
+.picker-list{max-height:60vh;overflow-y:auto;display:grid;gap:6px}
+.picker-btn{width:100%;min-height:52px;border-radius:14px;border:1px solid #14b8a6;background:linear-gradient(135deg,#0d2d2b 0%,#0a2523 100%);color:#5eead4;font-weight:1000;font-size:15px;padding:10px 14px;text-align:right;letter-spacing:-.2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.picker-btn:active{transform:scale(.97);background:linear-gradient(135deg,#0f3d3a 0%,#0c322f 100%)}
+.picker-empty{padding:20px 10px;text-align:center;color:#94a3b8;font-size:13px;font-weight:900;line-height:1.5}
+
+/* ---- Courier Badge on Card ---- */
+.courier-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(59,130,246,.08));border:1px solid rgba(59,130,246,.4);color:#93c5fd;border-radius:10px;padding:4px 10px;font-size:12px;font-weight:1000;margin-top:2px;letter-spacing:-.2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* v25: Clickable courier pill — replaces static badge. Tap it to open picker. */
+.courier-pill{display:flex;align-items:center;justify-content:space-between;gap:8px;background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(59,130,246,.06));border:1px solid rgba(59,130,246,.35);color:#bfdbfe;border-radius:12px;padding:9px 12px;font-size:13px;font-weight:1000;margin-top:6px;letter-spacing:-.2px;width:100%;box-sizing:border-box;cursor:pointer;font-family:inherit;transition:.15s;box-shadow:0 1px 0 rgba(59,130,246,.08) inset}
+.courier-pill:hover{background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(59,130,246,.1));border-color:rgba(59,130,246,.55)}
+.courier-pill:active{transform:scale(.99)}
+.courier-pill.empty{background:linear-gradient(135deg,rgba(148,163,184,.1),rgba(148,163,184,.04));border-color:rgba(148,163,184,.3);color:#cbd5e1;font-weight:800;justify-content:center}
+.courier-pill.empty:hover{background:linear-gradient(135deg,rgba(148,163,184,.15),rgba(148,163,184,.08));border-color:rgba(148,163,184,.5)}
+.courier-pill .pill-hint{font-size:10px;font-weight:800;color:rgba(191,219,254,.65);background:rgba(255,255,255,.08);padding:2px 8px;border-radius:6px;letter-spacing:0;flex-shrink:0}
+
+/* v27: Pharmacy prep status — small pill inline next to the status badge */
+.badges-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-start}
+.prep-badge{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:1000;letter-spacing:-.1px;border-width:1px;border-style:solid;line-height:1;white-space:nowrap}
+.prep-badge.ready{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.5);color:#6ee7b7}
+.prep-badge.not-started{background:rgba(239,68,68,.13);border-color:rgba(239,68,68,.45);color:#fca5a5}
+
+/* v26: Late-order alarm banner — full-width, pulsing, above everything */
+.alarm-banner{position:fixed;top:0;left:0;right:0;z-index:99999;background:linear-gradient(135deg,#991b1b,#dc2626,#ef4444);color:#fff;padding:0;display:none;box-shadow:0 6px 24px rgba(220,38,38,.5);border-bottom:3px solid #fef2f2;animation:alarmPulseBg 1.2s ease-in-out infinite}
+.alarm-banner.show{display:block}
+.alarm-banner.muted{animation:none;opacity:.9}
+.alarm-inner{display:flex;align-items:center;gap:12px;padding:12px 14px;max-width:900px;margin:0 auto}
+.alarm-icon{font-size:26px;flex-shrink:0;animation:alarmShake .6s ease-in-out infinite}
+.alarm-banner.muted .alarm-icon{animation:none}
+.alarm-text{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.alarm-text b{font-size:14px;font-weight:1000;letter-spacing:-.2px;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.alarm-text span{font-size:11.5px;opacity:.95;font-weight:700}
+.alarm-count{font-size:16px;background:rgba(255,255,255,.2);padding:1px 8px;border-radius:6px;margin:0 3px}
+.alarm-mute{background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.25);padding:8px 12px;border-radius:10px;font-weight:1000;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
+.alarm-mute:hover{background:rgba(0,0,0,.5)}
+@keyframes alarmPulseBg{0%,100%{background:linear-gradient(135deg,#991b1b,#dc2626,#ef4444)}50%{background:linear-gradient(135deg,#dc2626,#ef4444,#f87171)}}
+@keyframes alarmShake{0%,100%{transform:rotate(0deg) scale(1)}25%{transform:rotate(-8deg) scale(1.05)}75%{transform:rotate(8deg) scale(1.05)}}
+/* Push the top of the page down when alarm is active so it doesn't cover content */
+body.alarm-active{padding-top:64px}
+@media(max-width:430px){body.alarm-active{padding-top:76px}.alarm-text b{font-size:13px}.alarm-text span{font-size:11px}}
+/* Alarm-highlighted cards: extra red pulse */
+.card.alarm-late{border-color:#ef4444!important;box-shadow:0 0 0 2px rgba(239,68,68,.4),0 8px 24px rgba(239,68,68,.35)!important;animation:cardAlarmPulse 1.5s ease-in-out infinite}
+@keyframes cardAlarmPulse{0%,100%{box-shadow:0 0 0 2px rgba(239,68,68,.4),0 8px 24px rgba(239,68,68,.35)}50%{box-shadow:0 0 0 3px rgba(239,68,68,.7),0 8px 32px rgba(239,68,68,.55)}}
+
+/* ---- Postponed Badge (shown when order was rescheduled by admin/pharmacy) ---- */
+.postpone-badge{background:linear-gradient(135deg,rgba(147,51,234,.18),rgba(147,51,234,.08));border:1px solid rgba(168,85,247,.45);color:#e9d5ff;border-radius:11px;padding:5px 10px;font-size:11.5px;font-weight:1000;margin-bottom:6px;display:flex;align-items:center;gap:5px;letter-spacing:-.2px;line-height:1.3}
+
+/* ---- Hotel Warning Banner ---- */
+.warn-banner{background:linear-gradient(135deg,#78350f 0%,#92400e 100%);border:1px solid #fbbf24;color:#fef3c7;border-radius:11px;padding:8px 12px;margin-bottom:6px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:1000;box-shadow:0 4px 12px rgba(251,191,36,.15);letter-spacing:-.2px}
+.warn-icon{font-size:16px;flex:0 0 auto;line-height:1}
+
+/* ---- Install App Button (simple, in header) ---- */
+.install-btn{height:42px;border-radius:14px;font-size:13px;font-weight:1000;padding:0 12px;border:1px solid #14b8a6;background:linear-gradient(135deg,#0d2d2b 0%,#0a2523 100%);color:#5eead4;display:none;align-items:center;gap:5px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.install-btn.show{display:inline-flex}
+.install-btn:active{transform:scale(.96)}
+
+/* ---- Notification Status Button ---- */
+.notif-status{height:42px;width:42px;border-radius:14px;font-size:16px;padding:0;display:inline-flex;align-items:center;justify-content:center;position:relative;border:1px solid #344865;background:#10192a;color:#eef6ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.notif-status.granted{border-color:#22c55e;background:linear-gradient(135deg,#052e15 0%,#0a3d1e 100%);color:#86efac}
+.notif-status.default{border-color:#f59e0b;background:linear-gradient(135deg,#1c1608 0%,#251d0a 100%);color:#fbbf24;animation:notifPulse 2s ease-in-out infinite}
+.notif-status.denied{border-color:#ef4444;background:linear-gradient(135deg,#2a0f13 0%,#1a0a0e 100%);color:#fca5a5}
+@keyframes notifPulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.5)}50%{box-shadow:0 0 0 5px rgba(245,158,11,0)}}
+.notif-status:active{transform:scale(.94)}
+</style>
+<link rel="manifest" href="manifest.json">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+</head>
+<body>
+<!-- v26: Late-order alarm banner -->
+<div class="alarm-banner" id="alarmBanner" role="alert" aria-live="assertive">
+  <div class="alarm-inner">
+    <div class="alarm-icon">⚠️</div>
+    <div class="alarm-text">
+      <b>تنبيه! <span class="alarm-count" id="alarmCount">0</span> أوردر متأخر عن الاستلام</b>
+      <span>عدّى 40 دقيقة والطيار مش متعيّن — استلم دلوقتي!</span>
+    </div>
+    <button class="alarm-mute" onclick="muteAlarm()" type="button">🔕 كتم</button>
+  </div>
+</div>
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <div class="splash-logo"><img src="icon-192.png" alt="Self Care Delivery"></div>
+    <div class="splash-title">Self Care Delivery</div>
+    <div class="splash-sub">جارٍ تحضير طلباتك...</div>
+    <div class="splash-dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+<div class="top">
+  <div class="head">
+    <div class="logo">
+      <div class="mark"><img src="icon-192.png" alt=""></div>
+      <div>
+        <div class="title">Self Care Delivery</div>
+        <div class="sync" id="lastSync">جاري التحديث...</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="install-btn" id="installBtn" onclick="installApp()">⬇ تنزيل</button>
+      <button class="notif-status" id="notifStatus" onclick="notifStatusTap()" aria-label="حالة الإشعارات">🔔</button>
+      <button class="refresh gear-btn" onclick="openCouriersModal()" aria-label="إدارة الطيارين">⚙️</button>
+      <button class="refresh" onclick="manualRefresh()">تحديث</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" id="dayToday" onclick="setDay('today')">النهاردة <span id="todayCount">٠</span></button>
+    <button class="tab" id="dayTomorrow" onclick="setDay('tomorrow')">بكرة <span id="tomorrowCount">٠</span></button>
+  </div>
+  <div class="filters">
+    <input class="search" id="searchInput" placeholder="بحث: أوردر / فندق" oninput="setSearch(this.value)">
+  </div>
+  <div class="summary">
+    <button class="sum pri active" id="sumBtnNeed" onclick="setStatus('need_assign')"><b id="sumNeed">٠</b><span>محتاج استلام</span></button>
+    <button class="sum danger" id="sumBtnLate" onclick="setStatus('late')"><b id="sumLate">٠</b><span>متأخر / متأجل</span></button>
+    <button class="sum" id="sumBtnAssigned" onclick="setStatus('assigned')"><b id="sumAssigned">٠</b><span>تم الاستلام</span></button>
+  </div>
+</div>
+<div class="wrap">
+  <div class="list" id="ordersList"></div>
+  <div class="empty" id="ordersEmpty" style="display:none">مفيش طلبات هنا</div>
+</div>
+
+<div class="modal" id="confirmModal" style="align-items:center" onclick="if(event.target===this)resolveConfirm(false)">
+  <div class="modal-panel confirm-panel">
+    <div class="confirm-text" id="confirmText">تأكيد؟</div>
+    <div class="confirm-actions">
+      <button class="confirm-no" onclick="resolveConfirm(false)">إلغاء</button>
+      <button class="confirm-yes" onclick="resolveConfirm(true)">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="couriersModal" style="align-items:center" onclick="if(event.target===this)closeCouriersModal()">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div class="modal-title">إدارة الطيارين</div>
+      <button class="modal-close" onclick="closeCouriersModal()">×</button>
+    </div>
+    <div id="couriersList" class="couriers-list"></div>
+    <div class="couriers-add">
+      <input id="courierNameInput" placeholder="اسم الطيار" class="courier-input" onkeydown="if(event.key==='Enter')addCourier()">
+      <button class="action done wide" style="height:44px" onclick="addCourier()">+ إضافة طيار</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="pickerModal" style="align-items:center" onclick="if(event.target===this)cancelPicker()">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div class="modal-title">مين هياخد الأوردر؟</div>
+      <button class="modal-close" onclick="cancelPicker()">×</button>
+    </div>
+    <div id="pickerList" class="picker-list"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+const SB_URL="https://lbeuqkerbenrpycuvohl.supabase.co";
+const SB_KEY="sb_publishable_Lbqjl73U7lqbFNVB5Sj64A_vEe6z5cB";
+const SB_HEADERS={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"return=minimal"};
+let orders=[];
+let activeDay="today";
+let activeStatus="need_assign";
+let searchValue="";
+const HOTEL_AR_NAMES={
+"Al Dora":"ال دورا",
+"Al Dora Hotel":"ال دورا هوتيل",
+"Al Dora Residence":"ال دورا ريسيدينكي",
+"Al Kasr":"القصر",
+"Al Kasr Hotel":"القصر هوتيل",
+"Al Kasr Sahl":"القصر ساهل",
+"Al Kasr Sahl Hasheesh":"القصر سهل حشيش",
+"Aladdin":"علاء الدين",
+"Aladdin Beach Resort":"علاء الدين بيتش ريزورت",
+"Albatros Alf Leila Wa Leila":"الباتروس ألف ليلة وليلة",
+"Albatros Aqua Blu":"الباتروس أكوا بلو",
+"Albatros Aqua Park":"الباتروس أكوا بارك",
+"Albatros Aqua Park Resort":"الباتروس أكوا بارك ريزورت",
+"Albatros Blu Spa":"الباتروس بلو سبا",
+"Albatros Citadel Resort":"الباتروس سيتادل ريزورت",
+"Albatros Makadi":"الباتروس مكادي",
+"Albatros Makadi Aqua Park":"الباتروس مكادي أكوا بارك",
+"Albatros Makadi Resort":"الباتروس مكادي ريزورت",
+"Albatros Palace":"الباتروس بالاس",
+"Albatros Palace Resort":"الباتروس بالاس ريزورت",
+"Aldau":"الداو",
+"Alf Leila Wa Leila":"ألف ليلة وليلة",
+"Ali Baba":"علي بابا",
+"Ali Baba Palace":"علي بابا بالاس",
+"Ali Baba Safaga":"علي بابا سفاجا",
+"Ali Baba Safaga Hotel":"علي بابا سفاجا هوتيل",
+"Ali Pasha":"علي باشا",
+"Alia Beach":"اليا بيتش",
+"Alia Beach Resort":"اليا بيتش ريزورت",
+"Alkasr Sahl Hasheesh":"القصر سهل حشيش",
+"Alma Bay Resort":"ألما باي ريزورت",
+"Amarina Abu Soma Resort":"أمارينا أبو سوما ريزورت",
+"AMC Royal":"إيه إم سي رويال",
+"AMC Royal Hotel & Spa":"إيه إم سي رويال هوتيل وسبا",
+"Amwaj Beach Club Abu Soma":"أمواج بيتش كلوب أبو سوما",
+"Ancient Sands El Gouna":"أنشنت ساندز الجونة",
+"Aqua Blu Resort":"أكوا بلو ريزورت",
+"Aqua Joy":"أكوا جوي",
+"Aqua Magic":"اكوا ماجيك",
+"Aqua Mondo Abu Soma":"أكوا موندو أبو سوما",
+"Aqua Vista Resort":"أكوا فيستا ريزورت",
+"Arabella Azur Resort":"أرابيلا أزور ريزورت",
+"Arabia Azur":"أرابيا أزور",
+"Arabia Azur Resort":"أرابيا أزور ريزورت",
+"Asteria":"أستيريا",
+"Azzurra Sahl Hasheesh":"أزورا سهل حشيش",
+"Baron Palace":"بارون بالاس",
+"Baron Palace Sahl Hasheesh":"بارون بالاس سهل حشيش",
+"Beach Albatros":"بيتش الباتروس",
+"Beach Albatros Resort":"بيتش الباتروس ريزورت",
+"Bel Air Azur":"بيل إير أزور",
+"Bel Air Azur Resort":"بيل إير أزور ريزورت",
+"Bella Vista":"بيلا فيستا",
+"Bella Vista Resort Hurghada":"بيلا فيستا ريزورت الغردقة",
+"Bellagio":"بيلاجيو",
+"Bellagio Beach Resort":"بيلاجيو بيتش ريزورت",
+"Blend Club Aqua Resort":"بلند كلوب أكوا ريزورت",
+"Blend Paradise":"بليند باراديسي",
+"Blu Spa":"بلو سبا",
+"Breakers Soma Bay":"برياكيرس سوما باي",
+"Calimera":"كاليميرا",
+"Calimera Blend Paradise":"كاليميرا بلند باراديس",
+"Calimera Blend Paradise Hurghada":"كاليميرا بلند باراديس الغردقة",
+"Calimera Hotel":"كاليميرا هوتيل",
+"Calimera Paradise":"كاليميرا باراديسي",
+"Caribbean World Soma Bay":"كاريبيان وورلد سوما باي",
+"Casa Cook":"كازا كوك",
+"Casa Cook El Gouna":"كازا كوك الجونة",
+"Cascades Soma Bay":"كاسكيدز سوما باي",
+"Caves Beach":"كيفز بيتش",
+"Caves Beach Resort":"كافيس بيتش ريزورت",
+"Citadel":"سيتاديل",
+"Citadel Resort":"سيتاديل ريزورت",
+"Cleopatra Luxury Makadi":"كليوباترا لاكشري مكادي",
+"Cleopatra Luxury Resort":"كليوباترا لاكشري ريزورت",
+"Cleopatra Luxury Resort Makadi Bay":"كليوباترا لاكشري ريزورت مكادي باي",
+"Cleopatra Makadi":"كليوباترا مكادي",
+"Club Azur Makadi":"كلوب أزور مكادي",
+"Club Azur Resort":"كلوب أزور ريزورت",
+"Continental":"كونتيننتال",
+"Continental Hotel Hurghada":"كونتيننتال هوتيل الغردقة",
+"Cook's Club El Gouna":"كوكس كلوب الجونة",
+"Cooks Club El Gouna":"كووكس كلوب الجونة",
+"Coopcs Club El Gouna":"كووبكس كلوب الجونة",
+"Coral Beach":"كورال بيتش",
+"Coral Beach Hurghada":"كورال بيتش الغردقة",
+"Coral Garden Resort Safaga":"كورال جاردن ريزورت سفاجا",
+"Coral Garden Safaga":"كورال جاردن سفاجا",
+"Coral Sun Beach":"كورال صن بيتش",
+"Coral Sun Beach Safaga":"كورال صن بيتش سفاجا",
+"Crystal Bay Resort":"كريستال باي ريزورت",
+"Dana Beach":"دانا بيتش",
+"Dana Beach Resort":"دانا بيتش ريزورت",
+"Dawar El Omda El Gouna":"دوار العمدة الجونة",
+"Desert Rose":"ديزرت روز",
+"Desert Rose Resort":"ديزرت روز ريزورت",
+"Diana Hotel":"ديانا هوتيل",
+"Diana Hotel Hurghada":"ديانا هوتيل الغردقة",
+"Eagles Downtown Zahabia":"ياجليس دوونتوون الذهبية",
+"Eagles Downtown Zahabia Resort & Aqua Park":"ياجليس دوونتوون الذهبية ريزورت وأكوا بارك",
+"Eagles Paradise Abu Soma Resort":"إيجلز باراديس أبو سوما ريزورت",
+"El Gouna":"الجونة",
+"El Palacio":"البلاسيو",
+"Elysees":"إليزيه",
+"Elysees Dream Beach":"إليزيه دريم بيتش",
+"Elysees Dream Beach Hotel":"إليزيه دريم بيتش هوتيل",
+"Elysees Hotel":"إليزيه هوتيل",
+"Elysees Hurghada":"إليزيه الغردقة",
+"Empire Beach":"إمباير بيتش",
+"Empire Beach Resort":"إمباير بيتش ريزورت",
+"Empire Beach Resort Hurghada":"إمباير بيتش ريزورت الغردقة",
+"Fanadir Hotel El Gouna":"فنادير هوتيل الجونة",
+"Festival Riviera":"فيستيفال ريفييرا",
+"Festival Riviera Resort":"فيستيفال ريفييرا ريزورت",
+"Flow Spectrum Resort":"فلوو سبيكتروم ريزورت",
+"Fort Arabesque":"فورت ارابيسكوي",
+"Fort Arabesque Resort":"فورت أرابيسك ريزورت",
+"Fort Arabesque Resort, Spa & Villas":"فورت ارابيسكوي ريزورت, سبا آند فيللاس",
+"Fort Arabesque The West Bay":"فورت أرابيسك ويست باي",
+"Four Seasons Hotel":"فوور سياسونس هوتيل",
+"Four Seasons Hotel Hurghada":"فوور سياسونس هوتيل الغردقة",
+"Gaisum Village":"جايسوم فيللاجي",
+"Geisum":"جييسوم",
+"Geisum Village":"جييسوم فيللاجي",
+"Giftun Azur":"جفتون ازور",
+"Giftun Azur Resort":"جفتون أزور ريزورت",
+"Golden Bay Makadi":"جولدين باي مكادي",
+"Golden Beach":"جولدن بيتش",
+"Golden Beach Resort":"جولدن بيتش ريزورت",
+"Grand Makadi":"جراند مكادي",
+"Grand Palace":"جراند بالاس",
+"Grand Water World Makadi":"جراند ووتر وورلد مكادي",
+"Grand Waterworld":"جراند ووتر وورلد",
+"Grand Waterworld Makadi":"جراند ووتر وورلد مكادي",
+"Grand Waterworld Makadi Bay":"جراند ووتر وورلد مكادي باي",
+"Grand Waterworld Resort Makadi":"جراند ووتر وورلد ريزورت مكادي",
+"Grand Watterword":"جراند واتتيروورد",
+"Grand Watterword Makadi":"جراند واتتيروورد مكادي",
+"Grand Watterworld":"جراند واتتيروورلد",
+"Grand Watterworld Makadi":"جراند واتتيروورلد مكادي",
+"Gravity Hotel":"جرافيتي هوتيل",
+"Gravity Hotel & Aqua Park Hurghada":"جرافيتي هوتيل وأكوا بارك الغردقة",
+"Gravity Hurghada":"جرافيتي الغردقة",
+"Gravity Sahl Hasheesh":"جرافيتي سهل حشيش",
+"Gravity Sahl Hasheesh Resort":"جرافيتي سهل حشيش ريزورت",
+"Harmony Makadi Bay":"هارموني مكادي باي",
+"Hawaii":"هاواي",
+"Hawaii Caesar":"هاواي كايسار",
+"Hawaii Caesar Palace":"هاواي كايسار بالاس",
+"Hawaii Caesar Palace Aqua Park":"هاواي كايسار بالاس أكوا بارك",
+"Hawaii Le Jardin":"هاواي لي جاردين",
+"Hawaii Le Jardin Aqua Park":"هاواي لي جاردين أكوا بارك",
+"Hawaii Paradise":"هاواي باراديسي",
+"Hawaii Paradise Aqua Park":"هاواي باراديسي أكوا بارك",
+"Hawaii Resorts":"هاواي ريزورتس",
+"Hawaii Riviera":"هاواي ريفييرا",
+"Hawaii Riviera Aqua Park":"هاواي ريفييرا أكوا بارك",
+"Hilton Hurghada Plaza":"هيلتون الغردقة بلازا",
+"Hilton Plaza":"هيلتون بلازا",
+"Hurghada Long Beach":"لونج بيتش الغردقة",
+"Hurghada Long Beach Resort":"الغردقة لونج بيتش ريزورت",
+"Hurghada Marriott Beach Resort":"ماريوت بيتش ريزورت الغردقة",
+"Iberotel Makadi Beach":"إيبروتيل مكادي بيتش",
+"Iberotel Makadi Beach Club":"إيبروتيل مكادي بيتش كلوب",
+"Imperial Shams Abu Soma":"إمبريال شمس أبو سوما",
+"Ivory Suites":"يفوري سويتيس",
+"Jasmine Palace":"جاسمين بالاس",
+"Jasmine Palace Resort":"جاسمين بالاس ريزورت",
+"Jasmine Village":"جاسميني فيللاجي",
+"Jaz Aquamarine":"جاز أكوامارين",
+"Jaz Aquamarine Resort":"جاز أكوامارين ريزورت",
+"Jaz Aquaviva":"جاز أكوافيفا",
+"Jaz Asteria":"جاز أستيريا",
+"Jaz Asteria Beach":"جاز أستيريا بيتش",
+"Jaz Blue Marine":"جاز بلوي ماريني",
+"Jaz Bluemarine":"جاز بلو مارين",
+"Jaz Casa Del Mar":"جاز كازا ديل مار",
+"Jaz Casa Del Mar Beach":"جاز كازا ديل مار بيتش",
+"Jaz Casa Del Mar Resort":"جاز كازا ديل مار ريزورت",
+"JAZ Elite Asteria":"جاز يليتي أستيريا",
+"Jaz Ivory":"جاز يفوري",
+"Jaz Makadi Blue":"جاز مكادي بلو",
+"Jaz Makadi Gardens":"جاز مكادي جاردنز",
+"Jaz Makadi Oasis":"جاز مكادي أواسيز",
+"Jaz Makadi Oasis Club":"جاز مكادي أواسيز كلوب",
+"Jaz Makadi Oasis Resort":"جاز مكادي أواسيز ريزورت",
+"Jaz Makadi Saraya":"جاز مكادي سرايا",
+"Jaz Makadi Saraya Palms":"جاز مكادي سرايا بالمز",
+"Jaz Makadi Saraya Resort":"جاز مكادي سرايا ريزورت",
+"Jaz Makadi Star":"جاز مكادي ستار",
+"Jaz Makadi Star & Spa":"جاز مكادي ستار آند سبا",
+"Jaz Makadi Star and Spa":"جاز مكادي ستار اند سبا",
+"Jaz Makadina":"جاز مكادينا",
+"Jaz Makadina Resort":"جاز مكادينا ريزورت",
+"Jaz Neo Ivory":"جاز نيو يفوري",
+"Jaz Neo Ivory Hurghada":"جاز نيو يفوري الغردقة",
+"Jaz Soma Beach":"جاز سوما بيتش",
+"Jewels Sahara":"جيويلس ساهارا",
+"Jewels Sahara Boutique Resort":"جيويلس ساهارا بووتيكوي ريزورت",
+"Jolie Bay":"جوليي باي",
+"Jungle":"جونجلي",
+"Jungle Aqua Park":"جنجل أكوا بارك",
+"Kai Sahl Hasheesh":"كاي سهل حشيش",
+"Kaisol Romance":"كايسول رومانس",
+"Kaisol Romance Resort Sahl Hasheesh":"كايسول رومانس ريزورت سهل حشيش",
+"Kempinski Hotel Soma Bay":"كمبينسكي هوتيل سوما باي",
+"Kempinski Soma Bay":"كمبينسكي سوما باي",
+"King Tut":"كينج توت",
+"King Tut Aqua Park":"كينج توت أكوا بارك",
+"King Tut Aqua Park Beach Resort":"كينج توت أكوا بارك بيتش ريزورت",
+"King Tut Resort":"كينج توت ريزورت",
+"La Maison Bleue El Gouna":"لا ميزون بلو الجونة",
+"Labranda":"لابراندا",
+"Labranda Club Makadi":"لابراندا كلوب مكادي",
+"Labranda Club Makadi Resort":"لابراندا كلوب مكادي ريزورت",
+"Labranda Garden Makadi":"لابراندا جاردن مكادي",
+"Labranda Royal Makadi":"لابراندا رويال مكادي",
+"Labranda Royal Makadi Resort":"لابراندا رويال مكادي ريزورت",
+"Lamar Resort Abu Soma":"لامار ريزورت أبو سوما",
+"Le Jardin":"لي جاردين",
+"Le Pacha":"لو باشا",
+"Le Pacha Resort":"لو باشا ريزورت",
+"Lemon & Soul":"ليمون آند سول",
+"Lemon & Soul Makadi":"ليمون سول مكادي",
+"Lemon and Soul Makadi":"ليمون آند سول مكادي",
+"Lemon Soul Garden Makadi Bay":"ليمون سول جاردن مكادي باي",
+"Lemon Soul Makadi":"ليمون سوول مكادي",
+"Long Beach":"لونج بيتش",
+"Lotus Bay Resort":"لوتس باي ريزورت",
+"Makadi Aqua Park":"مكادي أكوا بارك",
+"Makadi Bay Hotel":"مكادي باي هوتيل",
+"Makadi Heights":"مكادي هايتس",
+"Makadi Palace":"مكادي بالاس",
+"Makadi Spa":"مكادي سبا",
+"Makadi Spa Hotel":"مكادي سبا هوتيل",
+"Makadi Sun":"مكادي صن",
+"Mamlouk Palace":"مملوك بالاس",
+"Mangroovy El Gouna":"مانجروفي الجونة",
+"Marlin Inn":"مارلين إن",
+"Marriott Beach Resort":"ماريوت بيتش ريزورت",
+"Marriott Hurghada":"ماريوت الغردقة",
+"Mashrabiya":"ماسهرابييا",
+"Mashrabiya Hotel":"ماسهرابييا هوتيل",
+"Menaville Safaga":"مينافيل سفاجا",
+"Meraki":"ميراكي",
+"Meraki Resort Hurghada":"ميراكي ريزورت الغردقة",
+"Mercure":"ميركيور",
+"Mercure Hurghada":"ميركيور الغردقة",
+"Mercure Hurghada Hotel":"ميركيور الغردقة هوتيل",
+"Minamark":"مينا مارك",
+"Minamark Hotel":"مينا مارك هوتيل",
+"Mirage Bay":"ميراج باي",
+"Mirage Bay Resort":"ميراج باي ريزورت",
+"Mirage Bay Resort & Aqua Park":"ميراج باي ريزورت وأكوا بارك",
+"Mirage New Hawaii":"ميراجي نيو هاواي",
+"Mirage New Hawaii Resort":"ميراجي نيو هاواي ريزورت",
+"Mirette":"ميريتتي",
+"Mosaique Hotel El Gouna":"موزاييك هوتيل الجونة",
+"Movenpick":"موفنبيك",
+"Movenpick Resort & Spa El Gouna":"موفنبيك ريزورت وسبا الجونة",
+"Movenpick Soma Bay":"موفنبيك سوما باي",
+"Movenpick Waterpark Resort & Spa Soma Bay":"موفنبيك واتيربارك ريزورت وسبا سوما باي",
+"Movenpick Waterpark Soma Bay":"موفنبيك واتيربارك سوما باي",
+"Mövenpick":"موفنبيك",
+"Mövenpick Resort & Spa El Gouna":"موفنبيك ريزورت وسبا الجونة",
+"Mövenpick Soma Bay":"موفنبيك سوما باي",
+"Naga Bay":"ناجا باي",
+"Nemo Dive Club":"نيمو دايف كلوب",
+"Nemo Dive Club & Hotel":"نيمو دايف كلوب آند هوتيل",
+"Nemo Hotel Safaga":"نيمو هوتيل سفاجا",
+"Neverland":"نيفيرلاند",
+"Neverland City Hurghada":"نيفيرلاند كيتي الغردقة",
+"Neverland Hurghada":"نيفرلاند الغردقة",
+"New Eagles Aqua Park":"نيو إيجلز أكوا بارك",
+"New Eagles Aqua Park Resort":"نيو إيجلز أكوا بارك ريزورت",
+"New Eagles Resort":"نيو إيجلز ريزورت",
+"New Gaisum":"نيو جايسوم",
+"New Gaisum Resort":"نيو جايسوم ريزورت",
+"New Geisum":"نيو جييسوم",
+"New Geisum Resort":"نيو جييسوم ريزورت",
+"New Hawaii":"نيو هاواي",
+"Nubia":"نوبيا",
+"Nubia Aqua Beach Resort":"نوبيا اكوا بيتش ريزورت",
+"Ocean View El Gouna":"أوشن فيو الجونة",
+"Old Palace":"ولد بالاس",
+"Old Palace Resort Sahl Hasheesh":"أولد بالاس سهل حشيش",
+"Old Vic":"ولد فيك",
+"Old Vic Resort":"ولد فيك ريزورت",
+"Orca Village Safaga":"أوركا فيليدج سفاجا",
+"Palm Beach":"بالم بيتش",
+"Palm Beach Resort":"بالم بيتش ريزورت",
+"Palm Royale Soma Bay":"بالم رويال سوما باي",
+"Palma De Mirette":"بالما دي ميريتتي",
+"Paradise Abu Soma":"باراديس أبو سوما",
+"Paradise Abu Soma Resort":"باراديس أبو سوما ريزورت",
+"Paradise Beach":"باراديس بيتش",
+"Paradise Beach Safaga":"باراديس بيتش سفاجا",
+"Pharaoh Azur":"فرعون أزور",
+"Pharaoh Azur Resort":"فرعون أزور ريزورت",
+"Pickalbatros Alf Leila Wa Leila Resort":"بيك الباتروس ألف ليلة وليلة ريزورت",
+"Pickalbatros Aqua Blu":"بيك الباتروس أكوا بلو",
+"Pickalbatros Aqua Blu Resort":"بيك الباتروس أكوا بلو ريزورت",
+"Pickalbatros Aqua Park":"بيك الباتروس أكوا بارك",
+"Pickalbatros Aqua Park Resort":"بيك الباتروس أكوا بارك ريزورت",
+"Pickalbatros Aqua Park Resort Hurghada":"بيك الباتروس أكوا بارك ريزورت الغردقة",
+"Pickalbatros Aqua Vista":"بيك الباتروس أكوا فيستا",
+"Pickalbatros Aqua Vista Resort":"بيك الباتروس أكوا فيستا ريزورت",
+"Pickalbatros Blu Spa Resort":"بيك الباتروس بلو سبا ريزورت",
+"Pickalbatros Citadel Resort":"بيك الباتروس سيتادل ريزورت",
+"Pickalbatros Dana Beach Resort":"بيك الباتروس دانا بيتش ريزورت",
+"Pickalbatros Jungle Aqua Park":"بيك الباتروس جنجل أكوا بارك",
+"Pickalbatros Makadi Aqua Park":"بيك الباتروس مكادي أكوا بارك",
+"Pickalbatros Makadi Resort":"بيك الباتروس مكادي ريزورت",
+"Pickalbatros Neverland":"بيك الباتروس نيفيرلاند",
+"Pickalbatros Water Valley Resort":"بيك الباتروس ووتر فالي ريزورت",
+"Pickalbatros White Beach":"بيك الباتروس وايت بيتش",
+"Pickalbatros White Beach Resort":"بيك الباتروس وايت بيتش ريزورت",
+"Premier Le Reve":"بريمير لو ريف",
+"Premier Le Reve Hotel & Spa":"بريمير لو ريف هوتيل وسبا",
+"Premier Le Reve Sahl Hasheesh":"بريمير لو ريف سهل حشيش",
+"Prima Life Makadi":"بريما لايف مكادي",
+"Prima Life Makadi Resort":"بريما لايف مكادي ريزورت",
+"Prima Life Makadi Resort & Spa":"بريما لايف مكادي ريزورت وسبا",
+"Pyramisa":"بيراميزا",
+"Pyramisa Beach Resort Sahl Hasheesh":"بيراميزا بيتش ريزورت سهل حشيش",
+"Ras Soma":"رأس سوما",
+"Ras Soma Steigenberger":"رأس سوما شتايجنبرجر",
+"Red Sea Taj Mahal Resort":"ريد سي تاج ماهال ريزورت",
+"Regina Resort":"ريجينا ريزورت",
+"Regina Swiss Inn":"ريجينا سويس إن",
+"Regina Swiss Inn Resort":"ريجينا سويس إن ريزورت",
+"Rihana":"ريهانا",
+"Rixos Magawish":"ريكسوس ماجاويسه",
+"Rixos Premium Magawish":"ريكسوس بريميوم ماجاويسه",
+"Robinson Soma Bay":"روبنسون سوما باي",
+"Royal Lagoons":"رويال لاجوونس",
+"Royal Lagoons Resort":"رويال لاجونز ريزورت",
+"Royal Lagoons Resort & Aqua Park":"رويال لاجوونس ريزورت وأكوا بارك",
+"Royal Pharaohs Makadi":"رويال فاروز مكادي",
+"Royal Star":"رويال ستار",
+"Royal Star Beach Resort":"رويال ستار بيتش ريزورت",
+"Sahara Boutique Resort":"ساهارا بووتيكوي ريزورت",
+"Sea Star":"سيا ستار",
+"Sea Star Beau Rivage":"سي ستار بو ريفاج",
+"Seagull":"سي جل",
+"Seagull Beach Resort":"سي جل بيتش ريزورت",
+"Sentido Mamlouk Palace":"سينتيدو مملوك بالاس",
+"Sentido Naga Bay":"سينتيدو ناجا باي",
+"Sentido Palm Royale Soma Bay":"سينتيدو بالم رويال سوما باي",
+"Serenity":"سيرينيتي",
+"Serenity Alma Heights":"سيرينيتي الما هايتس",
+"Serenity Alma Heights / Fun City":"سيرينيتي الما هايتس / فون كيتي",
+"Serenity Alpha Beach":"سيرينيتي ألفا بيتش",
+"Serenity Alpha Beach Makadi Bay":"سيرينيتي ألفا بيتش مكادي باي",
+"Serenity Fun City":"سيرينيتي فون كيتي",
+"Serenity Makadi Beach":"سيرينيتي مكادي بيتش",
+"Serenity Makadi Heights":"سيرينيتي مكادي هايتس",
+"Serenity Sahl Hasheesh":"سيرينيتي سهل حشيش",
+"Serenity Sky Arc":"سيرينيتي سكي ارك",
+"Serry Beach Hurghada":"سيري بيتش الغردقة",
+"Serry Beach Resort":"سيري بيتش ريزورت",
+"Seva Golden Bay":"سيفا جولدين باي",
+"Seven Seas Hotel Jolie Bay":"سيفين سياس هوتيل جوليي باي",
+"Seven Seas Jolie Bay":"سفن سيز جولي باي",
+"Shams Lodge Water Sports Resort":"شمس لودج ووتر سبورتس ريزورت",
+"Shams Prestige":"شمس بريستيج",
+"Shams Prestige Abu Soma":"شمس بريستيج أبو سوما",
+"Shams Prestige Abu Soma Resort":"شمس بريستيج أبو سوما ريزورت",
+"Shams Safaga Resort":"شمس سفاجا ريزورت",
+"Sheraton Miramar":"شيراتون ميرامار",
+"Sheraton Soma Bay":"شيراتون سوما باي",
+"Sheraton Soma Bay Resort":"شيراتون سوما باي ريزورت",
+"Sindbad Club":"سندباد كلوب",
+"Siva Golden":"سيفا جولدين",
+"Siva Golden Bay":"سيفا جولدن باي",
+"Siva Golden Bay Hotel":"سيفا جولدن باي هوتيل",
+"Siva Golden Bay Makadi":"سيفا جولدن باي مكادي",
+"Siva Golden Bay Resort":"سيفا جولدن باي ريزورت",
+"Siva Grand Beach":"سيفا جراند بيتش",
+"Siva Grand Beach Hotel":"سيفا جراند بيتش هوتيل",
+"Sky View":"سكي فييو",
+"Sky View Suites":"سكي فييو سويتيس",
+"Sky View Suites Hotel":"سكي فييو سويتيس هوتيل",
+"Sol Y Mar Makadi Sun":"سول واي مار مكادي صن",
+"Sol Y Mar Paradise Beach":"سول واي مار باراديس بيتش",
+"Solymar Makadi Sun":"سوليمار مكادي صن",
+"Solymar Paradise Beach":"سوليمار باراديس بيتش",
+"Solymar Soma Beach":"سوليمار سوما بيتش",
+"Sphinx":"سفنكس",
+"Sphinx Aqua Park":"سفنكس أكوا بارك",
+"Sphinx Aqua Park Beach Resort":"سفنكس أكوا بارك بيتش ريزورت",
+"Sphinx Resort":"سفنكس ريزورت",
+"SRNTY":"سيرينتي",
+"SRNTY Resort":"سيرينتي ريزورت",
+"SRNTY Sahl Hasheesh":"سيرينتي سهل حشيش",
+"Steigenberger ALDAU":"شتايجنبرجر الداو",
+"Steigenberger ALDAU Beach Hotel":"شتايجنبرجر الداو بيتش هوتيل",
+"Steigenberger Aldau Beach Hotel":"شتايجنبرجر الداو بيتش هوتيل",
+"Steigenberger Aqua Magic":"شتايجنبرجر أكوا ماجيك",
+"Steigenberger Aqua Magic Hurghada":"شتايجنبرجر أكوا ماجيك الغردقة",
+"Steigenberger Golf":"شتايجنبرجر جولف",
+"Steigenberger Golf Resort El Gouna":"شتايجنبرجر جولف ريزورت الجونة",
+"Steigenberger Makadi":"شتايجنبرجر مكادي",
+"Steigenberger Makadi Resort":"شتايجنبرجر مكادي ريزورت",
+"Steigenberger Pure Lifestyle":"شتايجنبرجر بيور لايف ستايل",
+"Steigenberger Ras Soma":"شتايجنبرجر رأس سوما",
+"Steigenberger Resort Ras Soma":"شتايجنبرجر ريزورت رأس سوما",
+"Stella Beach Makadi":"ستيلا بيتش مكادي",
+"Stella Beach Resort & Spa Makadi Bay":"ستيلا بيتش ريزورت آند سبا مكادي باي",
+"Stella Beach Resort Makadi Bay":"ستيلا بيتش ريزورت مكادي باي",
+"Stella Di Mare":"ستيلا دي ماري",
+"Stella Di Mare Makadi Bay":"ستيلا دي ماري مكادي باي",
+"Stella Gardens Makadi":"ستيلا جاردنز مكادي",
+"Stella Gardens Resort & Spa Makadi Bay":"ستيلا جاردنز ريزورت وسبا مكادي باي",
+"Stella Gardens Resort Makadi Bay":"ستيلا جاردنز ريزورت مكادي باي",
+"Stella Makadi":"ستيلا مكادي",
+"Sultan Bey El Gouna":"سلطان بيه الجونة",
+"Sun Beach Abu Soma":"صن بيتش أبو سوما",
+"Sun Beach Hotel Abu Soma":"سون بيتش هوتيل أبو سوما",
+"Sun Beach Hotel Safaga":"سون بيتش هوتيل سفاجا",
+"Sun Beach Safaga":"صن بيتش سفاجا",
+"Sunny Days":"صني دايز",
+"Sunny Days El Palacio":"صني دايز البلاسيو",
+"Sunny Days El Palacio Resort & Spa":"صني دايز البلاسيو ريزورت وسبا",
+"Sunny Days Mirette":"صني دايز ميريتتي",
+"Sunny Days Palma De Mirette":"صني دايز بالما دي ميريتتي",
+"Sunny Days Palma De Mirette Resort & Spa":"صني دايز بالما دي ميريتتي ريزورت وسبا",
+"Sunrise":"صن رايز",
+"Sunrise Alma Bay":"صن رايز ألما باي",
+"Sunrise Alma Bay Resort":"صن رايز ألما باي ريزورت",
+"Sunrise Aqua Joy":"صن رايز أكوا جوي",
+"Sunrise Aqua Joy Resort":"صن رايز أكوا جوي ريزورت",
+"Sunrise Crystal Bay":"صن رايز كريستال باي",
+"Sunrise Crystal Bay Resort":"صن رايز كريستال باي ريزورت",
+"Sunrise Garden Beach":"صن رايز جاردن بيتش",
+"Sunrise Garden Beach Resort":"صن رايز جاردن بيتش ريزورت",
+"Sunrise Holidays Resort":"صن رايز هوليدايز ريزورت",
+"Sunrise Mamlouk":"صن رايز ماملووك",
+"Sunrise Mamlouk Palace Resort":"صن رايز مملوك بالاس ريزورت",
+"Sunrise Royal Makadi":"صن رايز رويال مكادي",
+"Sunrise Royal Makadi Resort":"صن رايز رويال مكادي ريزورت",
+"Sunrise Tucana":"صن رايز توكانا",
+"Sunrise Tucana Resort":"صن رايز توكانا ريزورت",
+"Sunwing Makadi":"سونوينج مكادي",
+"Sunwing Waterworld Makadi":"سونوينج واتيروورلد مكادي",
+"Swiss Inn":"سويس إن",
+"Swiss Inn Resort Hurghada":"سويس إن ريزورت الغردقة",
+"The Breakers Diving & Surfing Lodge Soma Bay":"ذا بريكرز ديفينج آند سورفينج لودج سوما باي",
+"The Breakers Soma Bay":"ذا بريكرز سوما باي",
+"The Cascades Golf Resort, Spa & Thalasso":"تهي كاسكيدز جولف ريزورت, سبا آند تهالاسسو",
+"The Cascades Soma Bay":"تهي كاسكيدز سوما باي",
+"The Club Azur Resort":"تهي كلوب أزور ريزورت",
+"The Grand Hotel":"جراند هوتيل",
+"The Grand Hotel Hurghada":"جراند هوتيل الغردقة",
+"The Grand Makadi":"تهي جراند مكادي",
+"The Grand Palace":"تهي جراند بالاس",
+"The Grand Resort":"جراند ريزورت",
+"The Grand Resort Hurghada":"جراند ريزورت الغردقة",
+"The Oberoi Sahl Hasheesh":"تهي أوبروي سهل حشيش",
+"The Three Corners Ocean View":"ذا ثري كورنرز أوشن فيو",
+"The Three Corners Ocean View El Gouna":"ذا ثري كورنرز أوشن فيو الجونة",
+"The Three Corners Sunny Beach Resort":"ذا ثري كورنرز سونني بيتش ريزورت",
+"The V Luxury Resort Sahl Hasheesh":"تهي في لاكشري ريزورت سهل حشيش",
+"The V Sahl Hasheesh":"تهي ف سهل حشيش",
+"Three Corners":"ثري كورنرز",
+"Three Corners Rihana":"ثري كورنرز ريهانا",
+"Three Corners Rihana Resort":"ثري كورنرز ريهانا ريزورت",
+"Three Corners Sunny Beach":"ثري كورنرز صني بيتش",
+"Three Corners Sunny Beach Resort":"ثري كورنرز سونني بيتش ريزورت",
+"Tia Heights":"تيا هايتس",
+"Tia Heights Makadi Bay":"تيا هايتس مكادي باي",
+"Tiba Golden":"تيبا جولدين",
+"Tiba Golden Resort":"تيبا جولدين ريزورت",
+"Titanic Aqua Park":"تيتانيك أكوا بارك",
+"Titanic Aqua Park Resort":"تيتانيك أكوا بارك ريزورت",
+"Titanic Beach":"تيتانيك بيتش",
+"Titanic Beach Spa & Aqua Park":"تيتانيك بيتش سبا وأكوا بارك",
+"Titanic Palace":"تيتانيك بالاس",
+"Titanic Royal":"تيتانيك رويال",
+"Titanic Royal Resort":"تيتانيك رويال ريزورت",
+"Tropitel":"تروبيتل",
+"Tropitel Elite Sahl Hasheesh":"تروبيتل يليتي سهل حشيش",
+"Tropitel Sahl Hasheesh":"تروبيتل سهل حشيش",
+"Tropitel Sahl Hasheesh Resort":"تروبيتل سهل حشيش ريزورت",
+"TUI Blue Makadi":"توي بلو مكادي",
+"TUI Blue Makadi Gardens":"توي بلو مكادي جاردنز",
+"V Luxury Resort Sahl Hasheesh":"في لاكشري ريزورت سهل حشيش",
+"Veranda Resort":"فيرندا ريزورت",
+"Veranda Sahl Hasheesh":"فيرندا سهل حشيش",
+"Veranda Sahl Hasheesh Resort":"فيرندا سهل حشيش ريزورت",
+"Water Valley Resort":"ووتر فالي ريزورت",
+"White Beach":"وايت بيتش",
+"Xanadu Makadi Bay":"زانادو مكادي باي",
+"Zahabia":"الذهبية",
+"Zahabia Eagles":"الذهبية ياجليس",
+"Zahabia Hotel":"الذهبية هوتيل",
+"Zahabia Hotel & Beach Resort":"الذهبية هوتيل آند بيتش ريزورت",
+"Zahabia Resort":"الذهبية ريزورت",
+"Zen Resort Sahl Hasheesh":"زين ريزورت سهل حشيش"
+}
+function init(){
+  loadOrders();
+  loadCouriers();
+  setInterval(loadOrders,10000);
+  setInterval(loadCouriers,60000);
+  setInterval(()=>{if(!document.hidden&&orders.length)try{render()}catch(e){}},30000);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden){loadOrders();loadCouriers()}});
+  window.addEventListener("focus",loadOrders);
+  // v26: Late-order alarm loop
+  setInterval(checkLateAlarm,30000);
+  setInterval(()=>{if(alarmActive&&!alarmMuted)playAlarmSiren()},60000);
+  // Prime the audio context on the first user gesture (autoplay policy compliance)
+  const priming=()=>{try{ensureAudioCtx();if(alarmAudioCtx&&alarmAudioCtx.state==="suspended")alarmAudioCtx.resume().catch(()=>{})}catch(e){}
+    document.removeEventListener("click",priming);document.removeEventListener("touchstart",priming);};
+  document.addEventListener("click",priming,{once:false});
+  document.addEventListener("touchstart",priming,{once:false});
+}
+async function loadOrders(){
+  try{
+    if(document.body&&document.body.classList)document.body.classList.add("loading");
+    const urls=[
+      SB_URL+"/rest/v1/orders?select=*&order=created_at.desc&limit=700",
+      SB_URL+"/rest/v1/orders?select=*&limit=700"
+    ];
+    let d=null,lastError="";
+    for(const url of urls){
+      try{
+        const r=await fetch(url,{headers:SB_HEADERS});
+        const txt=await r.text();
+        let body=[];
+        try{body=txt?JSON.parse(txt):[]}catch(parseErr){body=[]}
+        if(r.ok){d=body;break}
+        lastError=body&&body.message?body.message:(txt||"load failed");
+      }catch(err){lastError=err&&err.message?err.message:String(err)}
+    }
+    if(!Array.isArray(d))throw new Error(lastError||"load failed");
+    orders=dedupeOrders(d.filter(o=>!isCancelled(o)&&!isDraftOrder(o)&&within48Hours(o)));
+    const last=document.getElementById("lastSync");
+    if(last)last.textContent="آخر تحديث: "+arNum(new Date().toLocaleTimeString("ar-EG",{hour:"numeric",minute:"2-digit"}));
+    try{render()}catch(viewErr){console.error("render failed",viewErr);toast("تم تحميل البيانات لكن حصل خطأ في العرض")}
+    try{checkReminders()}catch(e){}
+  }catch(e){
+    console.error("delivery manager load failed",e);
+    const last=document.getElementById("lastSync");
+    if(last)last.textContent="فشل التحديث";
+    const list=document.getElementById("ordersList");
+    if(list)list.innerHTML="";
+    const empty=document.getElementById("ordersEmpty");
+    if(empty){empty.style.display="block";empty.textContent="تعذر تحميل الطلبات. اضغط تحديث."}
+    toast("حصل خطأ في تحميل الطلبات");
+  }finally{
+    if(document.body&&document.body.classList)document.body.classList.remove("loading");
+  }
+}
+function manualRefresh(){lastStructHash="";loadOrders();toast("تم التحديث")}
+function setDay(v){activeDay=(v==="tomorrow"?"tomorrow":"today");lastStructHash="";render()}
+function setStatus(v){activeStatus=v;lastStructHash="";render()}
+function setSearch(v){searchValue=String(v||"").trim();lastStructHash="";render()}
+
+// hash-based smart render: skip if nothing changed structurally
+let lastStructHash="";
+function structHashOf(current){
+  return current.map(o=>`${o.id}|${(o._ids||[]).length}|${dispatcherStatus(o)}|${deadlineClass(o)}|${o.delivery_time}|${o.hotel}|${o.courier_name||""}|${o.postponed_from||""}|${o.pharmacy_status||""}`).join("~")
+    + `|${activeStatus}|${activeDay}|${searchValue}`;
+}
+
+function updateHeaderCounts(base){
+  document.getElementById("todayCount").textContent=arNum(orders.filter(o=>effectiveDay(o)==="today").length);
+  document.getElementById("tomorrowCount").textContent=arNum(orders.filter(o=>effectiveDay(o)==="tomorrow").length);
+  document.getElementById("sumNeed").textContent=arNum(base.filter(o=>dispatcherStatus(o)==="need_assign").length);
+  document.getElementById("sumLate").textContent=arNum(base.filter(o=>dispatcherStatus(o)==="late").length);
+  // تم الاستلام يشمل: assigned + arrived + delivered — كل اللي اتنقّل من محتاج استلام
+  document.getElementById("sumAssigned").textContent=arNum(base.filter(o=>{
+    const s=dispatcherStatus(o);
+    return s==="assigned"||s==="arrived"||s==="delivered";
+  }).length);
+  document.getElementById("dayToday").classList.toggle("active",activeDay==="today");
+  document.getElementById("dayTomorrow").classList.toggle("active",activeDay==="tomorrow");
+  document.getElementById("sumBtnNeed").classList.toggle("active",activeStatus==="need_assign");
+  document.getElementById("sumBtnLate").classList.toggle("active",activeStatus==="late");
+  document.getElementById("sumBtnAssigned").classList.toggle("active",activeStatus==="assigned");
+}
+
+function updateCountdownsInPlace(current){
+  for(const o of current){
+    const el=document.querySelector('[data-order-id="'+String(o.id).replace(/"/g,'')+'"]');
+    if(!el)continue;
+    const newHtml=countdownHtml(o);
+    const existing=el.querySelector(':scope > .card-inner > .countdown');
+    if(newHtml){
+      const tmp=document.createElement("div");tmp.innerHTML=newHtml;
+      const newEl=tmp.firstElementChild;
+      if(!newEl)continue;
+      if(existing){
+        // update text only if different
+        if(existing.outerHTML!==newEl.outerHTML){
+          // update text content without re-creating node, preserves animations
+          const newText=newEl.childNodes[newEl.childNodes.length-1];
+          if(newText && newText.nodeType===3){
+            const oldText=existing.childNodes[existing.childNodes.length-1];
+            if(oldText && oldText.nodeType===3){
+              if(oldText.textContent!==newText.textContent) oldText.textContent=newText.textContent;
+            }
+          }
+          // update class if type changed (soon<->late)
+          if(existing.className!==newEl.className){existing.className=newEl.className}
+        }
+      }else{
+        const head=el.querySelector(':scope > .card-inner > .card-head');
+        if(head)head.after(newEl);
+      }
+    }else if(existing){
+      existing.remove();
+    }
+  }
+}
+
+function render(){
+  const base=orders.filter(dayPass);
+  updateHeaderCounts(base);
+  const current=base.filter(statusPass).filter(searchPass).sort(sortOrders);
+  const list=document.getElementById("ordersList");
+  const empty=document.getElementById("ordersEmpty");
+  if(!current.length){
+    if(list.children.length){list.innerHTML=""}
+    empty.style.display="block";empty.textContent="مفيش طلبات هنا";
+    lastStructHash="__empty__";
+    return;
+  }
+  empty.style.display="none";
+  const h=structHashOf(current);
+  if(h===lastStructHash){
+    // نفس الترتيب والحالات — نحدّث بس العد التنازلي في مكانه من غير blink
+    updateCountdownsInPlace(current);
+    return;
+  }
+  lastStructHash=h;
+  list.innerHTML=current.map(card).join("");
+}
+function card(o){
+  const st=statusInfo(o);
+  const id=String(o.id);
+  const arr=ar12(o.delivery_time)||"غير محدد";
+  const pickupDt=orderPickupDateTime(o);
+  const pickup=pickupDt?ar12(`${String(pickupDt.getHours()).padStart(2,"0")}:${String(pickupDt.getMinutes()).padStart(2,"0")}`):"";
+  const hotel=hotelArName(o.hotel);
+  const cd=countdownHtml(o);
+  const warn=hotelWarningHtml(o);
+  const dsp=dispatcherStatus(o);
+  const showAction=(dsp==="need_assign"||dsp==="late");
+  const postponedBadge=o.postponed_from
+    ? `<div class="postpone-badge">⏱ مؤجل من ${esc(ar12(o.postponed_from)||o.postponed_from)} لـ ${esc(arr)}</div>`
+    : "";
+  // v25: For orders that already have a courier, the badge itself is clickable
+  // to reassign. For need_assign/late orders, the green "استلام" button already
+  // handles courier picking, so we don't add a redundant pill there.
+  let actionHtml="";
+  if(showAction){
+    actionHtml=`<div class="actions simple-actions">
+         <button class="action done wide" onclick="markReceived('${esc(idsText(o))}')" type="button">✓ تم استلام الطلب</button>
+       </div>`;
+    if(o.courier_name){
+      // Rare case: order still in need_assign/late but courier was set elsewhere — allow change
+      actionHtml+=`<button class="courier-pill assigned" onclick="changeCourier('${esc(idsText(o))}')" type="button" title="اضغط لتغيير الطيار">🏍 مع ${esc(o.courier_name)}<span class="pill-hint">تغيير</span></button>`;
+    }
+  } else if(o.courier_name){
+    actionHtml=`<button class="courier-pill assigned" onclick="changeCourier('${esc(idsText(o))}')" type="button" title="اضغط لتغيير الطيار">🏍 مع ${esc(o.courier_name)}<span class="pill-hint">تغيير</span></button>`;
+  } else {
+    // No courier + not in need_assign state (e.g., delivered without record) — offer picker
+    actionHtml=`<button class="courier-pill empty" onclick="changeCourier('${esc(idsText(o))}')" type="button">🏍 اختار طيار</button>`;
+  }
+  return `<article class="card ${st.key} ${deadlineClass(o)} ${o.source==='essentials'?'essentials':''}" data-order-id="${esc(id)}">
+    <div class="card-inner">
+      <div class="card-head">
+        <div class="code">#${esc(arNum(o.id))}${o._ids&&o._ids.length>1?`<span class="dup-badge">+${arNum(o._ids.length-1)} مكرر</span>`:""}</div>
+        <div class="badges-group">
+          ${o.source==='essentials'?`<div class="essentials-tag">🚬 ESSENTIALS</div>`:""}
+          <div class="badge ${st.cls}">${esc(st.text)}</div>
+          ${pharmacyReadinessBadge(o)}
+        </div>
+      </div>
+      ${postponedBadge}
+      ${warn}
+      ${cd}
+      <div class="times-row">
+        <div class="time-block primary">
+          <div class="time-label">استلام مقترح</div>
+          <div class="time-value">${esc(pickup||"—")}</div>
+        </div>
+        <div class="time-block">
+          <div class="time-label">وصول</div>
+          <div class="time-value">${esc(arr)}</div>
+        </div>
+      </div>
+      <div class="hotel-row">
+        <div class="hotel">${esc(hotel)}</div>
+        <button class="map-mini" onclick="openHotelLocation('${esc(id)}')">لوكيشن</button>
+      </div>
+      ${actionHtml}
+    </div>
+  </article>`;
+}
+
+function hasHotelIssue(o){
+  const raw=String(o.hotel||"").trim();
+  if(!raw)return true;
+  const digitsOnly=raw.replace(/[\s\-()+\.,]/g,"");
+  if(/^\+?\d{7,}$/.test(digitsOnly))return true;
+  const letters=raw.replace(/[^a-zA-Z\u0600-\u06FF]/g,"");
+  return letters.length<3;
+}
+
+function hotelWarningHtml(o){
+  const st=dispatcherStatus(o);
+  if(st==="delivered"||st==="arrived")return"";
+  if(!hasHotelIssue(o))return"";
+  return `<div class="warn-banner"><span class="warn-icon">⚠️</span>اتصل بالصيدلية قبل التوصيل</div>`;
+}
+function countdownHtml(o){
+  const st=dispatcherStatus(o);
+  if(st==="assigned"||st==="arrived"||st==="delivered")return"";
+  const dt=orderPickupDateTime(o);
+  if(!dt)return"";
+  const diff=dt.getTime()-Date.now();
+  const mins=Math.max(1,Math.round(Math.abs(diff)/60000));
+  const label=formatMinutesAr(mins);
+  if(diff<0){
+    return `<div class="countdown late"><span class="countdown-dot"></span>عدّى معاد الاستلام بـ ${label}</div>`;
+  }
+  if(isSoon(o)){
+    return `<div class="countdown soon"><span class="countdown-dot"></span>باقي ${label} على الاستلام</div>`;
+  }
+  return"";
+}
+function formatMinutesAr(m){
+  if(m<60)return arNum(m)+" دقيقة";
+  const h=Math.floor(m/60);
+  const min=m%60;
+  if(!min)return arNum(h)+" ساعة";
+  return arNum(h)+" س و "+arNum(min)+" د";
+}
+// ====== إدارة الطيارين ======
+let couriers=[];
+let pickerResolve=null;
+
+async function loadCouriers(){
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/couriers?active=eq.true&order=name.asc&select=id,name,phone",{headers:SB_HEADERS});
+    if(!r.ok)throw new Error(await r.text());
+    couriers=await r.json();
+  }catch(e){console.error("loadCouriers",e);couriers=[]}
+}
+
+function openCouriersModal(){
+  renderCouriersList();
+  document.getElementById("couriersModal").classList.add("show");
+  setTimeout(()=>{const inp=document.getElementById("courierNameInput");if(inp)inp.focus()},100);
+}
+function closeCouriersModal(){
+  document.getElementById("couriersModal").classList.remove("show");
+}
+
+function renderCouriersList(){
+  const list=document.getElementById("couriersList");
+  if(!list)return;
+  if(!couriers.length){
+    list.innerHTML='<div class="couriers-empty">مفيش طيارين مسجّلين. ضيف من تحت.</div>';
+    return;
+  }
+  list.innerHTML=couriers.map(c=>
+    `<div class="courier-item">
+      <div class="courier-item-name">${esc(c.name)}</div>
+      <button class="courier-delete" onclick="deleteCourier(${c.id},'${esc(c.name).replace(/'/g,"\\'")}')">حذف</button>
+    </div>`
+  ).join("");
+}
+
+async function addCourier(){
+  const inp=document.getElementById("courierNameInput");
+  const name=String(inp.value||"").trim();
+  if(!name){toast("اكتب اسم الطيار الأول");return}
+  if(name.length>50){toast("الاسم طويل جداً");return}
+  if(couriers.some(c=>c.name.toLowerCase()===name.toLowerCase())){toast("الطيار ده مضاف قبل كده");return}
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/couriers",{
+      method:"POST",
+      headers:{...SB_HEADERS,"Prefer":"return=representation"},
+      body:JSON.stringify({name,active:true})
+    });
+    if(!r.ok)throw new Error(await r.text());
+    const data=await r.json();
+    if(Array.isArray(data)&&data[0])couriers.push({id:data[0].id,name:data[0].name});
+    couriers.sort((a,b)=>a.name.localeCompare(b.name,"ar"));
+    inp.value="";
+    renderCouriersList();
+    toast("تم إضافة "+name+" ✓");
+  }catch(e){console.error(e);toast("تعذر الإضافة")}
+}
+
+async function deleteCourier(id,name){
+  if(!await askConfirm("حذف الطيار "+name+"؟","حذف"))return;
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/couriers?id=eq."+id,{
+      method:"PATCH",
+      headers:SB_HEADERS,
+      body:JSON.stringify({active:false})
+    });
+    if(!r.ok)throw new Error(await r.text());
+    couriers=couriers.filter(c=>c.id!==id);
+    renderCouriersList();
+    toast("تم حذف "+name);
+  }catch(e){console.error(e);toast("تعذر الحذف")}
+}
+
+// اختيار طيار عند استلام أوردر
+function pickCourier(){
+  return new Promise(resolve=>{
+    pickerResolve=resolve;
+    const list=document.getElementById("pickerList");
+    if(!list)return resolve(null);
+    if(!couriers.length){
+      list.innerHTML='<div class="picker-empty">مفيش طيارين مسجّلين.<br>افتح ⚙️ من فوق وضيف طيار الأول.</div>';
+    }else{
+      list.innerHTML=couriers.map(c=>
+        `<button class="picker-btn" onclick="selectCourier('${esc(c.name).replace(/'/g,"\\'")}')">${esc(c.name)}</button>`
+      ).join("");
+    }
+    document.getElementById("pickerModal").classList.add("show");
+  });
+}
+function selectCourier(name){
+  document.getElementById("pickerModal").classList.remove("show");
+  if(pickerResolve){pickerResolve(name);pickerResolve=null}
+}
+function cancelPicker(){
+  document.getElementById("pickerModal").classList.remove("show");
+  if(pickerResolve){pickerResolve(null);pickerResolve=null}
+}
+
+async function markReceived(ids){
+  const courierName=await pickCourier();
+  if(!courierName)return;
+  const payload={delivery_status:"assigned",courier_assigned_at:new Date().toISOString(),courier_name:courierName};
+  await patchOrders(ids,payload,"الأوردر مع "+courierName);
+}
+// v25: Change/reassign courier without touching delivery_status — usable at any time
+async function changeCourier(ids){
+  const courierName=await pickCourier();
+  if(!courierName)return;
+  const payload={courier_name:courierName,courier_assigned_at:new Date().toISOString()};
+  await patchOrders(ids,payload,"الطيار اتغير لـ "+courierName);
+}
+async function patchOrders(ids,payload,msg){
+  try{
+    const list=String(ids||"").split(",").map(x=>x.trim()).filter(Boolean);
+    await Promise.all(list.map(id=>fetch(SB_URL+"/rest/v1/orders?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:SB_HEADERS,body:JSON.stringify(payload)}).then(async r=>{if(!r.ok)throw new Error(await r.text())})));
+    orders.forEach(o=>{if((o._ids||[String(o.id)]).some(id=>list.includes(String(id))))Object.assign(o,payload)});
+    render();
+    toast(msg);
+  }catch(e){console.error(e);toast("تعذر الحفظ")}
+}
+function within48Hours(o){
+  const ref=o.created_at?new Date(o.created_at):effectiveDate(o);
+  if(!(ref instanceof Date)||isNaN(ref))return true;
+  return Date.now()-ref.getTime()<=48*60*60*1000;
+}
+function dispatcherStatus(o){
+  const s=deliveryStatus(o);
+  if(s==="delivered")return"delivered";
+  if(s==="arrived")return"arrived";
+  if(s==="assigned")return"assigned";
+  if(isLateUnassigned(o))return"late";
+  return"need_assign";
+}
+function deliveryStatus(o){
+  const s=String(o.delivery_status||"").toLowerCase();
+  if(s==="done"||s==="delivered")return"delivered";
+  if(s==="arrived"||s==="courier_arrived")return"arrived";
+  if(s==="accepted"||s==="assigned"||s==="picked_up")return"assigned";
+  return"waiting";
+}
+function statusInfo(o){
+  const s=dispatcherStatus(o);
+  if(s==="delivered")return{key:"delivered",cls:"b-delivered",text:"تم التسليم"};
+  if(s==="arrived")return{key:"arrived",cls:"b-arrived",text:"وصل الفندق"};
+  if(s==="assigned")return{key:"assigned",cls:"b-assigned",text:"تم الاستلام"};
+  if(s==="late")return{key:"late",cls:"b-late",text:"متأخر / متأجل"};
+  if(isSoon(o))return{key:"waiting",cls:"b-soon",text:deadlineText(o)};
+  return{key:"waiting",cls:"b-waiting",text:"محتاج استلام"};
+}
+function orderDeliveryDateTime(o){
+  const d=effectiveDate(o);
+  const mins=timeMinutes(o.delivery_time);
+  if(!(d instanceof Date)||isNaN(d)||mins===9999)return null;
+  return new Date(d.getFullYear(),d.getMonth(),d.getDate(),Math.floor(mins/60),mins%60,0,0);
+}
+// وقت الاستلام من الصيدلية = وقت التسليم للعميل ناقص ساعة
+function orderPickupDateTime(o){
+  const dt=orderDeliveryDateTime(o);
+  if(!dt)return null;
+  return new Date(dt.getTime()-60*60*1000);
+}
+function isLateUnassigned(o){
+  if(deliveryStatus(o)!=="waiting")return false;
+  const dt=orderPickupDateTime(o);
+  if(!dt)return false;
+  return Date.now()>=dt.getTime();
+}
+
+// v28: Pharmacy prep badge removed — no more "اتحضر / متحضرش" on cards
+function pharmacyReadinessBadge(o){
+  return "";
+}
+
+/* ============================================================
+   v26: Late-order alarm system
+   - Fires when an order is 40+ minutes past pickup deadline with
+     no courier assigned. Shows a red banner + plays a loud siren
+     sound + vibrates the phone. Re-alerts every minute until
+     dismissed or the order is assigned.
+   ============================================================ */
+const ALARM_THRESHOLD_MIN=40;
+const alarmedOrderIds=new Set();
+let alarmActive=false;
+let alarmMuted=false;
+let alarmAudioCtx=null;
+
+function ensureAudioCtx(){
+  if(alarmAudioCtx)return alarmAudioCtx;
+  try{alarmAudioCtx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){alarmAudioCtx=null}
+  return alarmAudioCtx;
+}
+
+function playAlarmSiren(){
+  const ctx=ensureAudioCtx();
+  if(!ctx)return;
+  if(ctx.state==="suspended")ctx.resume().catch(()=>{});
+  const now=ctx.currentTime;
+  // Loud two-tone siren (three cycles)
+  for(let i=0;i<3;i++){
+    const start=now+i*0.55;
+    // Rising tone
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type="square";
+    osc.frequency.setValueAtTime(760,start);
+    osc.frequency.linearRampToValueAtTime(1240,start+0.28);
+    osc.frequency.linearRampToValueAtTime(760,start+0.5);
+    gain.gain.setValueAtTime(0,start);
+    gain.gain.linearRampToValueAtTime(0.7,start+0.05);
+    gain.gain.linearRampToValueAtTime(0.7,start+0.45);
+    gain.gain.linearRampToValueAtTime(0,start+0.5);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(start);
+    osc.stop(start+0.5);
+    // Second oscillator for richness
+    const osc2=ctx.createOscillator();
+    const gain2=ctx.createGain();
+    osc2.type="sawtooth";
+    osc2.frequency.setValueAtTime(380,start);
+    osc2.frequency.linearRampToValueAtTime(620,start+0.28);
+    osc2.frequency.linearRampToValueAtTime(380,start+0.5);
+    gain2.gain.setValueAtTime(0,start);
+    gain2.gain.linearRampToValueAtTime(0.4,start+0.05);
+    gain2.gain.linearRampToValueAtTime(0.4,start+0.45);
+    gain2.gain.linearRampToValueAtTime(0,start+0.5);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(start);
+    osc2.stop(start+0.5);
+  }
+  // Vibrate on mobile
+  if(navigator.vibrate){
+    try{navigator.vibrate([400,120,400,120,400,120,600])}catch(e){}
+  }
+}
+
+function checkLateAlarm(){
+  const now=Date.now();
+  const currentAlarmed=new Set();
+  for(const o of orders){
+    if(o.courier_name)continue;
+    const dt=orderPickupDateTime(o);
+    if(!dt)continue;
+    const minutesLate=(now-dt.getTime())/60000;
+    if(minutesLate>=ALARM_THRESHOLD_MIN){
+      const ids=(o._ids&&o._ids.length?o._ids:[o.id]).map(String);
+      ids.forEach(id=>currentAlarmed.add(id));
+    }
+  }
+  // Find newly-alarmed orders
+  const newlyAlarmed=[...currentAlarmed].filter(id=>!alarmedOrderIds.has(id));
+  const anyAlarmed=currentAlarmed.size>0;
+  // Update state
+  alarmedOrderIds.clear();
+  currentAlarmed.forEach(id=>alarmedOrderIds.add(id));
+  // Update banner
+  const banner=document.getElementById("alarmBanner");
+  const countEl=document.getElementById("alarmCount");
+  if(banner){
+    if(anyAlarmed){
+      // Count unique groups (dedupe by _ids) — approximate by group count
+      const groupCount=orders.filter(o=>{
+        const ids=(o._ids&&o._ids.length?o._ids:[o.id]).map(String);
+        return ids.some(id=>alarmedOrderIds.has(id));
+      }).length;
+      if(countEl)countEl.textContent=arNum(groupCount);
+      banner.classList.add("show");
+      document.body.classList.add("alarm-active");
+      alarmActive=true;
+    } else {
+      banner.classList.remove("show","muted");
+      document.body.classList.remove("alarm-active");
+      alarmActive=false;
+      alarmMuted=false;
+    }
+  }
+  // Highlight cards
+  document.querySelectorAll("article.card").forEach(card=>{
+    const id=card.getAttribute("data-order-id");
+    if(id&&alarmedOrderIds.has(id))card.classList.add("alarm-late");
+    else card.classList.remove("alarm-late");
+  });
+  // Fire siren if a new order just entered alarm state (and not muted)
+  if(newlyAlarmed.length>0&&!alarmMuted){
+    playAlarmSiren();
+  }
+}
+
+function muteAlarm(){
+  alarmMuted=true;
+  const banner=document.getElementById("alarmBanner");
+  if(banner)banner.classList.add("muted");
+  toast("تم كتم الصوت — البانر يفضل ظاهر");
+}
+
+function isSoon(o){
+  if(dispatcherStatus(o)==="late"||dispatcherStatus(o)==="delivered")return false;
+  const dt=orderPickupDateTime(o);
+  if(!dt)return false;
+  const diff=dt.getTime()-Date.now();
+  return diff<=30*60*1000&&diff>0;
+}
+function deadlineText(o){
+  return"قرب الاستلام";
+}
+function deadlineClass(o){
+  if(dispatcherStatus(o)==="late")return"late";
+  if(isSoon(o))return"soon";
+  return"";
+}
+function dayPass(o){return effectiveDay(o)===activeDay}
+function isCompletedStatus(s){return s==="arrived"||s==="delivered"}
+function statusPass(o){
+  const s=dispatcherStatus(o);
+  if(activeStatus==="all")return true;
+  if(activeStatus==="assigned")return s==="assigned"||isCompletedStatus(s);
+  return s===activeStatus;
+}
+function searchPass(o){
+  if(!searchValue)return true;
+  const q=normalize(searchValue);
+  return [o.id,...(o._ids||[]),hotelArName(o.hotel),o.hotel].some(v=>normalize(String(v||"")).includes(q));
+}
+function minutesToDeadline(o){
+  const dt=orderDeliveryDateTime(o);
+  if(!dt)return 1e15;
+  return dt.getTime()-Date.now();
+}
+function sortOrders(a,b){
+  const da=dispatcherStatus(a)==="delivered"?1:0,db=dispatcherStatus(b)==="delivered"?1:0;
+  if(da!==db)return da-db;
+  const wa=statusWeight(a),wb=statusWeight(b);
+  if(wa!==wb)return wa-wb;
+  const ma=minutesToDeadline(a),mb=minutesToDeadline(b);
+  if(ma!==mb)return ma-mb;
+  return numberFrom(a.id)-numberFrom(b.id);
+}
+function statusWeight(o){
+  const s=dispatcherStatus(o);
+  if(s==="late")return 0;
+  if(s==="need_assign")return isSoon(o)?0.5:1;
+  if(s==="assigned")return 2;
+  if(s==="arrived")return 3;
+  if(s==="delivered")return 4;
+  return 5;
+}
+function orderExitMinutes(o){const mins=timeMinutes(o.delivery_time);if(mins===9999)return 9999;let v=mins-60;if(v<0)v+=1440;return v}
+function readyBefore(o){const mins=timeMinutes(o.delivery_time);if(mins===9999)return"";let v=mins-60;if(v<0)v+=1440;const h=Math.floor(v/60);const m=String(v%60).padStart(2,"0");return ar12(`${String(h).padStart(2,"0")}:${m}`)}
+function timeMinutes(t){
+  const s=String(t||"").trim();
+  // Match HH:MM optionally followed by AM/PM (or Arabic ص/م)
+  let m=s.match(/(\d{1,2}):(\d{2})\s*(AM|PM|ص|م|صباحًا|صباحا|مساءً|مساء)?/i);
+  if(m){
+    let h=parseInt(m[1],10);
+    const min=parseInt(m[2],10);
+    const tag=String(m[3]||"").toLowerCase();
+    if(/pm|م|مساء/.test(tag)&&h<12)h+=12;
+    if(/am|ص|صباح/.test(tag)&&h===12)h=0;
+    return h*60+min;
+  }
+  // No minutes given (e.g. "4 PM")
+  m=s.match(/(?:\b(AM|PM)\s*)?(\d{1,2})(?:\s*(AM|PM|ص|م|صباحًا|صباحا|مساءً|مساء))?/i);
+  if(!m)return 9999;
+  let h=parseInt(m[2],10);
+  const tag=String(m[1]||m[3]||"").toLowerCase();
+  if(/pm|م|مساء/.test(tag)&&h<12)h+=12;
+  if(/am|ص|صباح/.test(tag)&&h===12)h=0;
+  return h*60;
+}
+function effectiveDate(o){const direct=parseOrderDate(o.delivery_date||o.order_date||o.date||o.delivery_day);if(direct)return direct;const base=o.created_at?new Date(o.created_at):new Date();const d=new Date(base.getFullYear(),base.getMonth(),base.getDate());if(isTomorrowWord(o.delivery_day))d.setDate(d.getDate()+1);return d}
+function effectiveDay(o){const e=effectiveDate(o);const now=new Date();const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());const tomorrow=new Date(today);tomorrow.setDate(today.getDate()+1);if(sameDay(e,today))return"today";if(sameDay(e,tomorrow))return"tomorrow";return"other"}
+function orderDayText(o){const d=effectiveDay(o);if(d==="today")return"النهاردة";if(d==="tomorrow")return"بكرة";return formatDateAr(effectiveDate(o))}
+function parseOrderDate(v){const s=String(v||"").trim();if(!s)return null;if(isTomorrowWord(s)||/today|اليوم|النهاردة|dnes/i.test(s))return null;let m=s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/);if(m){const d=new Date(+m[1],+m[2]-1,+m[3]);return isNaN(d)?null:d}m=s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})$/);if(m){let y=+m[3];if(y<100)y+=2000;const d=new Date(y,+m[2]-1,+m[1]);return isNaN(d)?null:d}return null}
+function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function isTomorrowWord(v){return /tomorrow|zítra|zitra|завтра|morgen|بكرة|غدا|غدًا/i.test(String(v||""))}
+function formatDateAr(d){if(!(d instanceof Date)||isNaN(d))return"غير محدد";const days=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];return days[d.getDay()]+" "+arNum(d.getDate())+"/"+arNum(d.getMonth()+1)}
+function ar12(t){const mins=timeMinutes(t);if(mins===9999)return clean(t);let h=Math.floor(mins/60);const min=String(mins%60).padStart(2,"0");const suf=h<12?"ص":"م";let h12=h%12;if(h12===0)h12=12;return arNum(h12+":"+min+" "+suf)}
+function paymentAr(p){const s=clean(p);const x=s.toLowerCase();if(/visa|card|كارت|فيزا|pos|karta|карт/.test(x))return"كارت / فيزا";if(/cash|كاش|نقد|hotov|bar|нал|готів/.test(x))return"كاش";return s||"غير محدد"}
+function amountText(o){const v=numberFrom(o.total_egp||o.egp_total||o.total);return v?formatMoney(v)+" جنيه":"غير محدد"}
+function idsText(o){return (o._ids&&o._ids.length?o._ids:[o.id]).map(String).join(",")}
+function getItems(o){
+  let it=o.items;
+  if(typeof it==="string"){try{it=JSON.parse(it)}catch(e){it=[]}}
+  if(Array.isArray(it))return it;
+  return [];
+}
+function itemsKey(o){return getItems(o).map(x=>clean(x.name||x.product_name||x.title).toLowerCase()+":"+clean(x.qty||x.quantity||x.count||1)).join(",")}
+function duplicateKey(o){
+  return [
+    clean(o.hotel).toLowerCase(),
+    clean(o.room).toLowerCase(),
+    clean(o.delivery_day).toLowerCase(),
+    clean(o.delivery_date||o.order_date||o.date),
+    clean(o.delivery_time),
+    clean(o.payment).toLowerCase(),
+    clean(o.total),
+    clean(o.branch).toLowerCase(),
+    itemsKey(o)
+  ].join("|");
+}
+function dedupeOrders(rows){
+  const map=new Map();
+  rows.forEach(o=>{
+    const day=effectiveDay(o);
+    if(day!=="today"&&day!=="tomorrow")return;
+    const key=duplicateKey(o);
+    const old=map.get(key);
+    if(!old){o._ids=[String(o.id)];map.set(key,o);return}
+    old._ids=[...(old._ids||[String(old.id)]),String(o.id)];
+    const rank={need_assign:0,late:0,assigned:1,arrived:2,delivered:3};
+    const oldRank=rank[dispatcherStatus(old)]??0;
+    const newRank=rank[dispatcherStatus(o)]??0;
+    if(newRank>oldRank){const ids=old._ids;o._ids=ids;map.set(key,o)}
+  });
+  return Array.from(map.values());
+}
+function isCancelled(o){
+  const combined=[o.status,o.main_status,o.delivery_status,o.order_status,o.state].map(v=>String(v||"").toLowerCase()).join(" ");
+  return /cancel|canceled|cancelled|voided|void|reject|refused|declined|ملغ|مرفوض|رفض|zrušen|zruseno|zrusen|storno|отмен/i.test(combined);
+}
+function isDraftOrder(o){const s=String(o.status||"").toLowerCase();return s==="draft"||s.includes("draft")||s.includes("pendingwhatsapp")}
+function openHotelLocation(id){const o=orders.find(x=>String(x.id)===String(id)||(x._ids||[]).some(v=>String(v)===String(id)));const h=clean(o&&o.hotel);if(!h)return toast("اسم الفندق غير محدد");window.open("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(h+" Egypt"),"_blank","noopener")}
+function hotelArName(name){
+  const original=clean(name);
+  if(!original)return"فندق غير محدد";
+  if(HOTEL_AR_NAMES[original])return HOTEL_AR_NAMES[original];
+  const n=normalize(original);
+  for(const k of Object.keys(HOTEL_AR_NAMES||{})){
+    if(normalize(k)===n)return HOTEL_AR_NAMES[k];
+  }
+  return original;
+}
+function normalize(s){return String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\u0600-\u06ff]+/gi," ").replace(/\s+/g," ").trim()}
+function clean(v){return String(v??"").replace(/<[^>]*>/g,"").trim()}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
+function arNum(v){return String(v??"").replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d])}
+function numberFrom(v){const n=Number(String(v??"").replace(/[^\d.]/g,""));return Number.isFinite(n)?n:0}
+function formatMoney(n){const x=Number(n)||0;return Number.isInteger(x)?String(x):x.toFixed(2)}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove("show"),2200)}
+function askConfirm(msg,yesText){
+  return new Promise(resolve=>{
+    const modal=document.getElementById("confirmModal");
+    const txt=document.getElementById("confirmText");
+    const yesBtn=modal.querySelector(".confirm-yes");
+    if(txt)txt.textContent=msg;
+    if(yesBtn)yesBtn.textContent=yesText||"تأكيد";
+    window.__confirmResolve=resolve;
+    if(modal)modal.classList.add("show");
+  });
+}
+function resolveConfirm(val){
+  const modal=document.getElementById("confirmModal");
+  if(modal)modal.classList.remove("show");
+  const r=window.__confirmResolve;
+  window.__confirmResolve=null;
+  if(r)r(val);
+}
+// ====== نظام تذكير قبل معاد الأوردر بساعة ======
+const REMINDER_LEAD_MIN=60;      // نبعت التذكير قبل معاد الوصول بساعة
+const REMINDER_TOLERANCE_MIN=20; // شباك زمني نطلق فيه (٤٠-٦٠ دقيقة قبل)
+const REMINDER_STORAGE_KEY="sc_reminded_orders_v1";
+
+function getRemindedIds(){
+  try{
+    const raw=localStorage.getItem(REMINDER_STORAGE_KEY);
+    const obj=raw?JSON.parse(raw):{};
+    const now=Date.now();
+    for(const k in obj){if(now-obj[k]>86400000)delete obj[k]}
+    return obj;
+  }catch(e){return{}}
+}
+function markReminded(id){
+  const obj=getRemindedIds();
+  obj[String(id)]=Date.now();
+  try{localStorage.setItem(REMINDER_STORAGE_KEY,JSON.stringify(obj))}catch(e){}
+}
+async function checkReminders(){
+  if(!("Notification" in window))return;
+  if(Notification.permission!=="granted")return;
+  if(!orders||!orders.length)return;
+  const reminded=getRemindedIds();
+  for(const o of orders){
+    const st=dispatcherStatus(o);
+    if(st!=="need_assign")continue;
+    const dt=orderDeliveryDateTime(o);
+    if(!dt)continue;
+    const mins=(dt.getTime()-Date.now())/60000;
+    if(mins>REMINDER_LEAD_MIN||mins<REMINDER_LEAD_MIN-REMINDER_TOLERANCE_MIN)continue;
+    const id=String(o.id);
+    if(reminded[id])continue;
+    const hotel=hotelArName(o.hotel);
+    const arr=ar12(o.delivery_time)||"";
+    const title="⏰ ابعت طيار — طلب #"+arNum(id);
+    const body=hotel+" • وصول "+arr+" • باقي "+arNum(Math.round(mins))+" دقيقة";
+    let ok=false;
+    try{
+      const reg=await navigator.serviceWorker.ready;
+      await reg.showNotification(title,{
+        body,
+        icon:"icon-192.png",
+        badge:"icon-192.png",
+        vibrate:[300,100,300,100,300],
+        tag:"sc-reminder-"+id,
+        renotify:false,
+        requireInteraction:true,
+        data:{url:"./",orderId:id}
+      });
+      ok=true;
+    }catch(e){
+      try{new Notification(title,{body,icon:"icon-192.png",tag:"sc-reminder-"+id});ok=true}catch(e2){}
+    }
+    if(ok)markReminded(id);
+  }
+}
+async function requestNotifPermission(silent){
+  if(!("Notification" in window)){if(!silent)toast("المتصفح مش بيدعم الإشعارات");return}
+  if(Notification.permission==="granted"){if(!silent)toast("الإشعارات مفعّلة بالفعل ✓");return}
+  if(Notification.permission==="denied"){if(!silent)toast("الإشعارات محظورة — فعّلها من إعدادات المتصفح");return}
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm==="granted"){
+      toast("تم تفعيل الإشعارات ✓");
+      setupPush();
+      checkReminders();
+    }else if(!silent){
+      toast("لازم تسمح للتطبيق بالإشعارات");
+    }
+  }catch(e){if(!silent)toast("تعذر تفعيل الإشعارات")}
+}
+
+// اطلب إذن الإشعارات لما المستخدم يلمس التطبيق (المتصفح بيرفض الطلب من غير user gesture)
+function autoBootstrapNotifications(){
+  if(!("Notification" in window)){updateNotifStatus();return}
+  updateNotifStatus();
+  if(Notification.permission==="granted"){setupPush();return}
+  if(Notification.permission==="denied")return;
+
+  const askOnce=(event)=>{
+    if(Notification.permission!=="default"){updateNotifStatus();return}
+    try{
+      const p=Notification.requestPermission();
+      if(p && typeof p.then==="function"){
+        p.then(perm=>{
+          updateNotifStatus();
+          if(perm==="granted"){
+            toast("تم تفعيل الإشعارات ✓");
+            setupPush();
+            try{checkReminders()}catch(e){}
+          }
+        }).catch(()=>{updateNotifStatus()});
+      }
+    }catch(e){}
+    document.removeEventListener("pointerdown",askOnce);
+    document.removeEventListener("touchstart",askOnce);
+    document.removeEventListener("click",askOnce);
+  };
+  document.addEventListener("pointerdown",askOnce,{passive:true});
+  document.addEventListener("touchstart",askOnce,{passive:true});
+  document.addEventListener("click",askOnce);
+}
+
+// حالة الإشعارات — بيان بصري في الهيدر
+function updateNotifStatus(){
+  const btn=document.getElementById("notifStatus");
+  if(!btn)return;
+  btn.classList.remove("granted","default","denied");
+  if(!("Notification" in window)){btn.textContent="🔕";btn.classList.add("denied");return}
+  const p=Notification.permission;
+  if(p==="granted"){btn.textContent="🔔";btn.classList.add("granted")}
+  else if(p==="denied"){btn.textContent="🔕";btn.classList.add("denied")}
+  else{btn.textContent="🔔";btn.classList.add("default")}
+}
+
+// ضغطة على أيقونة الجرس — طلب الإذن أو شرح
+function notifStatusTap(){
+  if(!("Notification" in window)){toast("المتصفح مش بيدعم الإشعارات");return}
+  const p=Notification.permission;
+  if(p==="granted"){toast("الإشعارات مفعّلة ✓ — اختبار صوت");try{playAlertSound();if(navigator.vibrate)navigator.vibrate([300,100,300,100,300])}catch(e){}return}
+  if(p==="denied"){toast("الإشعارات محظورة — افتح ⋮ في المتصفح → معلومات الموقع → إشعارات → سماح");return}
+  // default
+  try{
+    const req=Notification.requestPermission();
+    if(req && typeof req.then==="function"){
+      req.then(perm=>{
+        updateNotifStatus();
+        if(perm==="granted"){
+          toast("تم تفعيل الإشعارات ✓");
+          setupPush();
+          try{checkReminders()}catch(e){}
+        }else if(perm==="denied"){
+          toast("تم رفض الإشعارات — فعّلها من إعدادات المتصفح");
+        }
+      });
+    }
+  }catch(e){toast("تعذر تفعيل الإشعارات")}
+}
+
+// اخفاء splash screen
+function hideSplash(){
+  const s=document.getElementById("splash");
+  if(s){s.classList.add("hide");setTimeout(()=>{try{s.remove()}catch(e){}},700)}
+}
+
+// ====== PWA Install Button (simple, in header) ======
+let deferredInstallPrompt=null;
+
+function isRunningStandalone(){
+  return window.matchMedia("(display-mode: standalone)").matches
+    || window.navigator.standalone===true
+    || document.referrer.startsWith("android-app://");
+}
+
+window.addEventListener("beforeinstallprompt",(e)=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  maybeShowInstallPrompt();
+});
+
+window.addEventListener("appinstalled",()=>{
+  const btn=document.getElementById("installBtn");
+  if(btn)btn.classList.remove("show");
+  deferredInstallPrompt=null;
+  toast("تم تنصيب التطبيق ✓");
+});
+
+function maybeShowInstallPrompt(){
+  const btn=document.getElementById("installBtn");
+  if(!btn)return;
+  if(isRunningStandalone()){btn.classList.remove("show");return}
+  btn.classList.add("show");
+}
+
+async function installApp(){
+  const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(!deferredInstallPrompt){
+    if(isIOS){
+      toast("في Safari: اضغط زرار المشاركة ↑ واختار \"إضافة إلى الشاشة الرئيسية\"");
+    }else{
+      toast("من قائمة المتصفح (⋮) اختار \"تنصيب التطبيق\"");
+    }
+    return;
+  }
+  try{
+    deferredInstallPrompt.prompt();
+    const {outcome}=await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt=null;
+    const btn=document.getElementById("installBtn");
+    if(btn && outcome==="accepted")btn.classList.remove("show");
+    if(outcome==="accepted")toast("جاري التنصيب...");
+  }catch(e){}
+}
+// ====== نهاية Install Prompt ======
+
+// ====== نهاية نظام التذكير ======
+
+init();
+setInterval(checkReminders,60000);
+setTimeout(checkReminders,5000);
+// سجّل listeners الإشعارات فوراً عشان أي لمسة من المستخدم تتحسب user gesture
+autoBootstrapNotifications();
+window.addEventListener("load",()=>{
+  setTimeout(hideSplash,1100);
+  setTimeout(maybeShowInstallPrompt,1800);
+});
+// safety fallback لو load ما اشتغلش
+setTimeout(hideSplash,3500);
+
+// ====== Service Worker + Auto Update ======
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("sw.js").then(reg=>{
+      // فحص فوري عند التحميل
+      reg.update().catch(()=>{});
+      // فحص كل ٥ دقايق طالما التطبيق شغّال
+      setInterval(()=>{reg.update().catch(()=>{})}, 5*60*1000);
+      // فحص لما يفتح التاب بعد ما كان مغلق/في الخلفية
+      document.addEventListener("visibilitychange",()=>{
+        if(!document.hidden)reg.update().catch(()=>{});
+      });
+      // لو لقى تحديث جديد يستقبله ويفعّله
+      reg.addEventListener("updatefound", ()=>{
+        const nw = reg.installing;
+        if(!nw)return;
+        nw.addEventListener("statechange", ()=>{
+          if(nw.state==="installed" && navigator.serviceWorker.controller){
+            // فيه تحديث جاهز — نديه ثانية عشان مايقاطعش شغل جاري
+            try{toast("🔄 نسخة جديدة — جاري التحديث...")}catch(e){}
+            setTimeout(()=>nw.postMessage("skipWaiting"), 800);
+          }
+        });
+      });
+    }).catch(()=>{});
+    // reload بلطف لما الـ SW الجديد ياخد المكان
+    let refreshing=false;
+    navigator.serviceWorker.addEventListener("controllerchange", ()=>{
+      if(refreshing)return;
+      refreshing=true;
+      setTimeout(()=>location.reload(), 300);
+    });
+  });
+}
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDWnqH3oR9IkxarG-pW9za4dHZVsJ5-qBI",
+  authDomain: "self-care-487ca.firebaseapp.com",
+  projectId: "self-care-487ca",
+  storageBucket: "self-care-487ca.firebasestorage.app",
+  messagingSenderId: "555397036454",
+  appId: "1:555397036454:web:83f472588229bbee76b767"
+};
+const VAPID_KEY = "BBvqY12fzttPc2BB0QTdhGM9_ZJjgivtkmUIBs4tMwlUl-n3H_FkaTMxiSgNeC-YH1dsQKaDbUdnfe9WQEcRHys";
+async function setupPush(){
+  try{
+    if(!("Notification" in window) || typeof firebase==="undefined" || !firebase.messaging) return;
+    if(!firebase.apps || !firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    const messaging = firebase.messaging();
+    const perm = await Notification.requestPermission();
+    if(perm !== "granted") return;
+    const reg = await navigator.serviceWorker.ready;
+    const token = await messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+    if(!token) return;
+    await fetch(SB_URL+"/rest/v1/push_tokens", {
+      method:"POST",
+      headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"},
+      body:JSON.stringify({ token: token, role: "delivery" })
+    });
+    // لما التطبيق مفتوح، Chrome بيمنع الصوت الافتراضي — نلعبه إحنا
+    messaging.onMessage((payload)=>{
+      const n = (payload && payload.notification) || {};
+      const d = (payload && payload.data) || {};
+      const title = n.title || d.title || "🔔 إشعار";
+      const body = n.body || d.body || "";
+      playAlertSound();
+      if(navigator.vibrate)navigator.vibrate([500,200,500,200,500]);
+      toast(title + " — " + body);
+      try{loadOrders()}catch(e){}
+    });
+  }catch(e){}
+}
+
+// صوت تنبيه من Web Audio API (٣ نبضات عالية النبرة)
+let _audioCtx = null;
+function playAlertSound(){
+  try{
+    if(!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(_audioCtx.state === "suspended") _audioCtx.resume();
+    const ctx = _audioCtx;
+    const now = ctx.currentTime;
+    const beeps = [
+      {freq:880, start:0.00, dur:0.22},
+      {freq:1100, start:0.30, dur:0.22},
+      {freq:1320, start:0.60, dur:0.30}
+    ];
+    for(const b of beeps){
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = "sine";
+      osc.frequency.value = b.freq;
+      const t0 = now + b.start;
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.5, t0 + 0.02);
+      gain.gain.setValueAtTime(0.5, t0 + b.dur - 0.05);
+      gain.gain.linearRampToValueAtTime(0, t0 + b.dur);
+      osc.start(t0);
+      osc.stop(t0 + b.dur + 0.05);
+    }
+  }catch(e){}
+}
+window.addEventListener("load", ()=>{ setTimeout(setupPush, 2000); });
+</script>
+</body>
+</html>
